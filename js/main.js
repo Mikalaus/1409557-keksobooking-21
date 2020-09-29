@@ -1,6 +1,12 @@
 "use strict";
 
-let mapPins = document.querySelector('.map__pins');
+const mapPins = document.querySelector('.map__pins');
+const pinTemplate = document.getElementById('pin');
+const map = document.querySelector('.map');
+const userPopup = document.getElementById('card');
+const filtersContainer = document.querySelector('.map__filters-container');
+let popupList = document.createDocumentFragment();
+let fragment = document.createDocumentFragment();
 
 // массив создаваемых объектов
 let userList = [];
@@ -8,7 +14,7 @@ let userList = [];
 // для getAvatarNum
 let avatarCount = [];
 let replacedNumsArray = [];
-let i;
+let avatarIndex;
 
 function randomInteger(min, max) {
   let rand = min - 0.5 + Math.random() * (max - min + 1);
@@ -32,7 +38,7 @@ const features = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'condit
 let featuresAmount;
 
 // для createPhotos
-const photosUrlArray = ['http:o0.github.io/assets/images/tokyo/hotel1.jpg', 'http:o0.github.io/assets/images/tokyo/hotel2.jpg', 'http:o0.github.io/assets/images/tokyo/hotel3.jpg'];
+const photosUrlArray = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
 let photosAmount;
 
 // вспомогательные функции
@@ -41,14 +47,14 @@ const getAvatarNum = () => {
   if (avatarCount.length === 0) {
     avatarCount = ['01', '02', '03', '04', '05', '06', '07', '08'];
     replacedNumsArray = [];
-    i = 7;
+    avatarIndex = 7;
   }
 
-  var num = randomInteger(0, i);
+  var num = randomInteger(0, avatarIndex);
   let replacedNum = avatarCount[num];
   replacedNumsArray.push(replacedNum);
   avatarCount.splice(num, 1);
-  i--;
+  avatarIndex--;
   return replacedNum
 }
 
@@ -60,18 +66,17 @@ const getRoomType = () => {
 const createFeatures = () => {
   let userFeatures = [];
   featuresAmount = randomInteger(1, 6);
-  for (let v = 0; v < featuresAmount; v++) {
-    userFeatures.push(features[v]);
+  for (let i = 0; i < featuresAmount; i++) {
+    userFeatures.push(features[i]);
   }
   return userFeatures
 }
 
 const createPhotos = () => {
   let userPhotos = [];
-  photosAmount = randomInteger(1, 10);
-  for (let v = 0; v < photosAmount; v++) {
-    let randomPhoto = randomInteger(0, 2);
-    userPhotos.push(photosUrlArray[randomPhoto]);
+  photosAmount = randomInteger(1, 3);
+  for (let i = 0; i < photosAmount; i++) {
+    userPhotos.push(photosUrlArray[i]);
   }
   return userPhotos;
 }
@@ -82,7 +87,7 @@ const createUserList = (userNumber) => {
   for (let i = 0; i < userNumber; i++) {
     x = randomInteger(100, 1100);
     y = randomInteger(130, 630);
-    price = randomInteger(100, 20000);
+    price = Math.round(randomInteger(100, 20000) / 1000) * 1000;
     roomsAmount = randomInteger(1, 10);
     guestPossible = randomInteger(1, 4);
     guestsAmount = roomsAmount * guestPossible;
@@ -115,13 +120,13 @@ const createUserList = (userNumber) => {
   }
 }
 
+// создание массива с объектами
 createUserList(8);
 
-const map = document.querySelector('.map');
+// временная реализация откртия карты
 map.classList.remove('map--faded');
 
-let pinTemplate = document.getElementById('pin');
-
+// функция создания меток из массива объектов userList
 const createPin = (userPin) => {
   let pin = pinTemplate.content.cloneNode(true);
 
@@ -133,22 +138,59 @@ const createPin = (userPin) => {
   return pin;
 }
 
-var fragment = document.createDocumentFragment();
+// добавление созданных меток в DOM
 for (let i = 0; i < userList.length; i++) {
   fragment.appendChild(createPin(userList[i]));
 }
 
 mapPins.appendChild(fragment);
 
-// На основе данных, созданных в первом пункте, создайте DOM-элементы, соответствующие меткам на карте, и заполните их данными из массива. Итоговую разметку метки .map__pin можно взять из шаблона #pin.
-//
-// У метки укажите:
-//
-// Координаты: style="left: {{location.x + смещение по X}}px; top: {{location.y + смещение по Y}}px;"
-// Обратите внимание. Координаты X и Y, которые вы вставите в разметку, это не координаты левого верхнего угла блока метки, а координаты, на которые указывает метка своим острым концом. Чтобы найти эту координату нужно учесть размеры элемента с меткой.
-//
-// У изображения метки укажите:
-//
-// Аватар: src="{{author.avatar}}"
-// Альтернативный текст: alt="{{заголовок объявления}}"
-// Отрисуйте сгенерированные DOM-элементы в блок .map__pins. Для вставки элементов используйте DocumentFragment.
+const transformFeatures = (userFeaturesLink) => {
+  let userFeatures = document.createDocumentFragment();
+  for (let i = 0; i < userFeaturesLink.offer.features.length; i++) {
+    let feature = document.createElement('li');
+    feature.classList.add('popup__feature');
+    feature.classList.add(`popup__feature--${userFeaturesLink.offer.features[i]}`);
+    userFeatures.appendChild(feature);
+  }
+  return userFeatures;
+}
+
+const transformImages = (userFeaturesLink) => {
+  let flatImages = document.createDocumentFragment();
+  for (let i = 0; i < userFeaturesLink.offer.photos.length; i++) {
+    let image = document.createElement('img');
+    image.width = "45";
+    image.height = "40";
+    image.classList.add('popup__photo');
+    image.src = `${userFeaturesLink.offer.photos[i]}`;
+    image.alt= "Фотография жилья";
+    flatImages.appendChild(image);
+  }
+  return flatImages;
+}
+
+// функция создания popup для меток из массива объектов userList
+const createPopup = (user) => {
+  let popup = userPopup.content.cloneNode(true);
+  let userFeatures = document.createDocumentFragment();
+
+  popup.querySelector('.popup__title').textContent = user.offer.title;
+  popup.querySelector('.popup__text--address').textContent = user.offer.address;
+  popup.querySelector('.popup__text--price').textContent = `${user.offer.price}₽/ночь`;
+  popup.querySelector('.popup__type').textContent = user.offer.type;
+  popup.querySelector('.popup__text--capacity').textContent = `${user.offer.rooms} комнаты для ${user.offer.guests} гостей`;
+  popup.querySelector('.popup__text--time').textContent = `Заезд после ${user.offer.checkin}, выезд до ${user.offer.checkout}`;
+  popup.querySelector('.popup__features').appendChild(transformFeatures(user));
+  popup.querySelector('.popup__photos').appendChild(transformImages(user));
+  popup.querySelector('.popup__description').textContent = user.offer.description;
+  popup.querySelector('.popup__avatar').src = user.author.avatar;
+
+  return popup;
+}
+
+for (let i = 0; i < userList.length; i++) {
+  popupList.appendChild(createPopup(userList[i]));
+}
+
+map.insertBefore(popupList, filtersContainer);

@@ -12,12 +12,14 @@
   },
   "devDependencies": {
     "eslint": "7.1.0",
-    "eslint-config-htmlacademy": "0.6.0"
+    "eslint-config-htmlacademy": "0.6.0",
+    "jsdoc": "^3.6.6"
   },
   "license": "MIT",
   "dependencies": {},
   "scripts": {
-    "test": "eslint js/"
+    "test": "eslint js/",
+    "jsdoc": "./node_modules/.bin/jsdoc js/mainM.js"
   },
   "engines": {
     "node": "8.11"

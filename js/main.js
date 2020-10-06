@@ -27,15 +27,38 @@ const mapFeatures = document.querySelector('.map__features');
 const adFormHeader = document.querySelector('.ad-form-header');
 const adFormElements = document.querySelectorAll('.ad-form__element');
 
-const MIN_TITLE_LENGTH = 30;
-const MAX_TITLE_LENGTH = 100;
+let mapPinList;
 
+const PIN_OFFSET = {
+  LEFT: 21,
+  TOP: 22
+}
+
+/**
+ * минимальные стоимости проживания за одну ночь
+ * @type {Object}
+ */
+const MIN_PRICE = {
+  BUNGALOW: 0,
+  FLAT: 1000,
+  HOUSE: 5000,
+  PALACE: 10000
+}
+
+/**
+ * Ограничения по вводу в главное описание добавляемого объявления
+ * @type {Object}
+ */
+const TITLE_LENGTH = {
+  MIN: 30,
+  MAX: 100
+}
+
+/**
+ * @type {number}
+ * максимальная цена за одну ночь
+ */
 const MAX_PRICE = 1000000;
-
-const BUNGALOW_MIN_PRICE = 0;
-const FLAT_MIN_PRICE = 1000;
-const HOUSE_MIN_PRICE = 5000;
-const PALACE_MIN_PRICE = 10000;
 
 /**
  * проверяет валидность описания размещаемого объявления
@@ -44,10 +67,10 @@ const PALACE_MIN_PRICE = 10000;
 adFormTitle.addEventListener('input', () => {
   let valueLength = adFormTitle.value.length;
 
-  if (valueLength < MIN_TITLE_LENGTH) {
-    adFormTitle.setCustomValidity('Ещё ' + (MIN_TITLE_LENGTH - valueLength) +' симв.');
-  } else if (valueLength > MAX_TITLE_LENGTH) {
-    adFormTitle.setCustomValidity('Удалите лишние ' + (valueLength - MAX_TITLE_LENGTH) +' симв.');
+  if (valueLength < TITLE_LENGTH.MIN) {
+    adFormTitle.setCustomValidity('Ещё ' + (TITLE_LENGTH.MIN - valueLength) +' симв.');
+  } else if (valueLength > TITLE_LENGTH.MAX) {
+    adFormTitle.setCustomValidity('Удалите лишние ' + (valueLength - TITLE_LENGTH.MAX) +' симв.');
   } else {
     adFormTitle.setCustomValidity('');
   }
@@ -71,38 +94,42 @@ adFormPrice.addEventListener('input', () => {
     adFormPrice.setCustomValidity('');
   }
 
-  if (type === 'bungalow' && price < BUNGALOW_MIN_PRICE) {
-    adFormPrice.setCustomValidity(`Вы не можете ввести значение ниже ${BUNGALOW_MIN_PRICE}`);
-    adFormPrice.placeholder = `${BUNGALOW_MIN_PRICE}`
-  } else if (type === 'flat' && price < FLAT_MIN_PRICE) {
-    adFormPrice.setCustomValidity(`Вы не можете ввести значение ниже ${FLAT_MIN_PRICE}`);
-    adFormPrice.placeholder = `${FLAT_MIN_PRICE}`
-  } else if (type === 'house' && price < HOUSE_MIN_PRICE) {
-    adFormPrice.setCustomValidity(`Вы не можете ввести значение ниже ${HOUSE_MIN_PRICE}`);
-    adFormPrice.placeholder = `${HOUSE_MIN_PRICE}`
-  } else if (type === 'palace' && price < PALACE_MIN_PRICE) {
-    adFormPrice.setCustomValidity(`Вы не можете ввести значение ниже ${PALACE_MIN_PRICE}`);
-    adFormPrice.placeholder = `${PALACE_MIN_PRICE}`
+  if (type === 'bungalow' && price < MIN_PRICE.BUNGALOW) {
+    adFormPrice.setCustomValidity(`Вы не можете ввести значение ниже ${MIN_PRICE.BUNGALOW}`);
+    adFormPrice.placeholder = `${MIN_PRICE.BUNGALOW}`
+  } else if (type === 'flat' && price < MIN_PRICE.FLAT) {
+    adFormPrice.setCustomValidity(`Вы не можете ввести значение ниже ${MIN_PRICE.FLAT}`);
+    adFormPrice.placeholder = `${MIN_PRICE.FLAT}`
+  } else if (type === 'house' && price < MIN_PRICE.HOUSE) {
+    adFormPrice.setCustomValidity(`Вы не можете ввести значение ниже ${MIN_PRICE.HOUSE}`);
+    adFormPrice.placeholder = `${MIN_PRICE.HOUSE}`
+  } else if (type === 'palace' && price < MIN_PRICE.PALACE) {
+    adFormPrice.setCustomValidity(`Вы не можете ввести значение ниже ${MIN_PRICE.PALACE}`);
+    adFormPrice.placeholder = `${MIN_PRICE.PALACE}`
   }
 
   adFormPrice.reportValidity();
 });
+
+const checkAdFormTypeSelect = () => {
+  let type = adFormTypeSelect.value;
+  if (type === 'bungalow') {
+    adFormPrice.placeholder = `${MIN_PRICE.BUNGALOW}`
+  } else if (type === 'flat') {
+    adFormPrice.placeholder = `${MIN_PRICE.FLAT}`
+  } else if (type === 'house') {
+    adFormPrice.placeholder = `${MIN_PRICE.HOUSE}`
+  } else if (type === 'palace') {
+    adFormPrice.placeholder = `${MIN_PRICE.PALACE}`
+  }
+}
 
 /**
  * проверяет value у select типов домов, изменяет значение placeholder у adFormPrice
  * @listens {change}
  */
 adFormTypeSelect.addEventListener('change', () => {
-  let type = adFormTypeSelect.value;
-  if (type === 'bungalow') {
-    adFormPrice.placeholder = `${BUNGALOW_MIN_PRICE}`
-  } else if (type === 'flat') {
-    adFormPrice.placeholder = `${FLAT_MIN_PRICE}`
-  } else if (type === 'house') {
-    adFormPrice.placeholder = `${HOUSE_MIN_PRICE}`
-  } else if (type === 'palace') {
-    adFormPrice.placeholder = `${PALACE_MIN_PRICE}`
-  }
+  checkAdFormTypeSelect();
 });
 
 /**
@@ -111,17 +138,17 @@ adFormTypeSelect.addEventListener('change', () => {
  */
 adFormTimeIn.addEventListener('change', () => {
   let time = adFormTimeIn.value;
-  adFormTimeOutOptions.forEach((item) => {
-    item.removeAttribute('selected');
-    if (item.value === time) {
-      item.selected = 'selected';
+  adFormTimeOutOptions.forEach((timeOutOption) => {
+    timeOutOption.removeAttribute('selected');
+    if (timeOutOption.value === time) {
+      timeOutOption.selected = 'selected';
     }
   });
 
-  adFormTimeInOptions.forEach((item) => {
-    item.removeAttribute('selected');
-    if (item.value === time) {
-      item.selected = 'selected';
+  adFormTimeInOptions.forEach((timeInOption) => {
+    timeInOption.removeAttribute('selected');
+    if (timeInOption.value === time) {
+      timeInOption.selected = 'selected';
     }
   });
 
@@ -133,40 +160,44 @@ adFormTimeIn.addEventListener('change', () => {
  */
 adFormTimeOut.addEventListener('change', () => {
   let time = adFormTimeOut.value;
-  adFormTimeInOptions.forEach((item) => {
-    item.removeAttribute('selected');
-    if (item.value === time) {
-      item.selected = 'selected';
+  adFormTimeInOptions.forEach((timeInOption) => {
+    timeInOption.removeAttribute('selected');
+    if (timeInOption.value === time) {
+      timeInOption.selected = 'selected';
     }
   });
 
-  adFormTimeOutOptions.forEach((item) => {
-    item.removeAttribute('selected');
-    if (item.value === time) {
-      item.selected = 'selected';
+  adFormTimeOutOptions.forEach((timeOutOption) => {
+    timeOutOption.removeAttribute('selected');
+    if (timeOutOption.value === time) {
+      timeOutOption.selected = 'selected';
     }
   });
 
 });
+
+const checkRoomNumberCapacity = () => {
+  let number = roomNumber.value;
+
+  capacityOptions.forEach((capacityOption) => {
+    capacityOption.setAttribute('disabled', 'disabled');
+    capacityOption.removeAttribute('selected');
+    if (capacityOption.value <= number && capacityOption.value !== '0' && number !== '100') {
+      capacityOption.removeAttribute('disabled');
+      capacityOption.selected = 'selected';
+    } else if (number === '100' && capacityOption.value === '0') {
+      capacityOption.removeAttribute('disabled');
+      capacityOption.selected = 'selected';
+    }
+  });
+}
 
 /**
  * проверяет валидность соотношения значений roomNumber и capacity
  * @listens {change}
  */
 roomNumber.addEventListener('change', () => {
-  let number = roomNumber.value;
-
-  capacityOptions.forEach((item) => {
-    item.setAttribute('disabled', 'disabled');
-    item.removeAttribute('selected');
-    if (item.value <= number && item.value !== '0' && number !== '100') {
-      item.removeAttribute('disabled');
-      item.selected = 'selected';
-    } else if (number === '100' && item.value === '0') {
-      item.removeAttribute('disabled');
-      item.selected = 'selected';
-    }
-  });
+  checkRoomNumberCapacity();
 });
 
 /**
@@ -180,12 +211,12 @@ const controlInputForms = (control) => {
     adFormHeader.removeAttribute('disabled');
     mapFeatures.removeAttribute('disabled');
 
-    mapFilterList.forEach((item) => {
-      item.removeAttribute('disabled');
+    mapFilterList.forEach((filter) => {
+      filter.removeAttribute('disabled');
     });
 
-    adFormElements.forEach((item) => {
-      item.removeAttribute('disabled');
+    adFormElements.forEach((element) => {
+      element.removeAttribute('disabled');
     });
 
   } else if (control === 'disable') {
@@ -193,12 +224,12 @@ const controlInputForms = (control) => {
     adFormHeader.setAttribute('disabled', 'disabled');
     mapFeatures.setAttribute('disabled', 'disabled');
 
-    mapFilterList.forEach((item) => {
-      item.setAttribute('disabled', 'disabled');
+    mapFilterList.forEach((filter) => {
+      filter.setAttribute('disabled', 'disabled');
     });
 
-    adFormElements.forEach((item) => {
-      item.setAttribute('disabled', 'disabled');
+    adFormElements.forEach((element) => {
+      element.setAttribute('disabled', 'disabled');
     });
   } else {
     alert('Введено неверное значение атрибута');
@@ -217,8 +248,8 @@ const getLocation = (obj) => {
     let top =  obj.style.top = (parseInt(obj.style.top,10));
     address.value = `${left}, ${top}`
   } else {
-    let left = obj.style.left = (parseInt(obj.style.left,10)) - 21;
-    let top =  obj.style.top = (parseInt(obj.style.top,10)) - 22;
+    let left = obj.style.left = (parseInt(obj.style.left,10)) - PIN_OFFSET.LEFT;
+    let top =  obj.style.top = (parseInt(obj.style.top,10)) - PIN_OFFSET.TOP;
     address.value = `${left}, ${top}`
   }
 }
@@ -231,6 +262,65 @@ getLocation(mainPin);
 const activateMap = () => {
   map.classList.remove('map--faded');
   generatePins(ads);
+  mapPinsClickHandler();
+  checkAdFormTypeSelect();
+  checkRoomNumberCapacity();
+}
+
+/**
+ * функция для открытия popup
+ * @param {number} - номер итерации цикла, перебирающего все метки на карте
+ */
+const openPopupByPinClickHandler = (i) => {
+  let popup = document.querySelector('.popup');
+  if (popup !== null) {
+    popup.remove();
+  }
+  map.insertBefore(generateAd(ads[i-1]), filtersContainer);
+  popup = document.querySelector('.popup');
+
+  /**
+   * удаление popup по нажатию на крестик
+   */
+  popup.querySelector('.popup__close').addEventListener('click', (evt) => {
+    evt.preventDefault();
+    popup.remove();
+  });
+}
+
+/**
+ * функция для добавления EventListener на метки объявления, для открытия ads
+ */
+const mapPinsClickHandler = () => {
+  mapPinList = document.querySelectorAll('.map__pin');
+  for (let i = 1; i < mapPinList.length; i++) {
+    /**
+     * открытие popup по нажатию с мышки
+     */
+    mapPinList[i].addEventListener('mousedown', (evt) => {
+      evt.preventDefault();
+      openPopupByPinClickHandler(i);
+    });
+
+    /**
+     * открытие popup по нажатию с клавиатуры
+     */
+    mapPinList[i].addEventListener('keydown', function (evt) {
+      if (evt.key === 'Enter') {
+        openPopupByPinClickHandler(i);
+      }
+    });
+  }
+}
+
+/**
+ * удаление всех загружаемых меток на карте
+ */
+const deletePins = () => {
+  let pins = mapPins.querySelectorAll('button');
+  for (let i = 1; i < pins.length; i++) {
+    pins[i].remove();
+  }
 }
 
 /**
@@ -239,6 +329,7 @@ const activateMap = () => {
  */
 mainPin.addEventListener('keydown', function (evt) {
   if (evt.key === 'Enter') {
+    deletePins();
     activateMap();
     getLocation(mainPin);
     controlInputForms('activate');
@@ -251,6 +342,7 @@ mainPin.addEventListener('keydown', function (evt) {
  */
 mainPin.addEventListener('mousedown', function (evt) {
   if (evt.which === 1) {
+    deletePins();
     activateMap();
     getLocation(mainPin);
     controlInputForms('activate');
@@ -454,8 +546,3 @@ const generateAd = (ad) => {
 
   return popup;
 }
-
-// let popupList = document.createDocumentFragment();
-// popupList.appendChild(generateAd(ads[0]));
-//
-// map.appendChild(popupList);

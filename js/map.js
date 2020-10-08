@@ -22,6 +22,18 @@
       }
 
       mapPins.appendChild(pinsList);
+    },
+
+    getLocation: (obj) => {
+      if (map.classList.contains('map--faded')){
+        let left = obj.style.left = (parseInt(obj.style.left,10));
+        let top =  obj.style.top = (parseInt(obj.style.top,10));
+        address.value = `${left}, ${top}`
+      } else {
+        let left = (parseInt(obj.style.left,10)) + window.PIN_OFFSET.LEFT;
+        let top = (parseInt(obj.style.top,10)) + window.PIN_OFFSET.TOP;
+        address.value = `${left}, ${top}`
+      }
     }
   }
 
@@ -38,23 +50,7 @@
 
   let ads = window.data.generateAds(8);
 
-  /**
-   * ищет адрес объекта
-   * @param {object} - объект, адрес которого надо найти
-   */
-  const getLocation = (obj) => {
-    if (map.classList.contains('map--faded')){
-      let left = obj.style.left = (parseInt(obj.style.left,10));
-      let top =  obj.style.top = (parseInt(obj.style.top,10));
-      address.value = `${left}, ${top}`
-    } else {
-      let left = obj.style.left = (parseInt(obj.style.left,10)) - window.PIN_OFFSET.LEFT;
-      let top =  obj.style.top = (parseInt(obj.style.top,10)) - window.PIN_OFFSET.TOP;
-      address.value = `${left}, ${top}`
-    }
-  }
-
-  getLocation(mainPin);
+  window.map.getLocation(mainPin);
 
   /**
    * cb для открытия карты и отрисовки меток
@@ -131,7 +127,7 @@
     if (evt.key === 'Enter') {
       deletePins();
       activateMap();
-      getLocation(mainPin);
+      window.map.getLocation(mainPin);
       controlInputForms('activate');
     }
   });
@@ -144,7 +140,7 @@
     if (evt.which === 1) {
       deletePins();
       activateMap();
-      getLocation(mainPin);
+      window.map.getLocation(mainPin);
       window.form.controlInputForms('activate');
     }
   });

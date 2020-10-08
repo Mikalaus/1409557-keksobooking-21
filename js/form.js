@@ -89,8 +89,8 @@
   const adFormElements = document.querySelectorAll('.ad-form__element');
 
   window.PIN_OFFSET = {
-    LEFT: 21,
-    TOP: 22
+    LEFT: 33,
+    TOP: 12
   }
 
   /**

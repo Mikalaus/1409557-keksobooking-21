@@ -2,48 +2,45 @@
 
 (() => {
 
-  window.data = {
+  /**
+   * генерация массива с информацией об объявлениях
+   * @param {number} - кол-во создаваемых объявлений
+   * @return {Array} - массив объявлений
+   */
+  const generateAds = (adsAmount) => {
+    let adsList = [];
+    for (let i = 0; i < adsAmount; i++) {
+      let x = getRandomInteger(50, 1150);
+      let y = getRandomInteger(130, 630);
+      let user = {
+        author: {
+          avatar: `img/avatars/user0${i+1}.png`
+        },
 
-    /**
-     * генерация массива с информацией об объявлениях
-     * @param {number} - кол-во создаваемых объявлений
-     * @return {Array} - массив объявлений
-     */
-    generateAds: (adsAmount) => {
-      let adsList = [];
-      for (let i = 0; i < adsAmount; i++) {
-        let x = getRandomInteger(50, 1150);
-        let y = getRandomInteger(130, 630);
-        let user = {
-          author: {
-            avatar: `img/avatars/user0${i+1}.png`
-          },
+        offer: {
+            title: 'Lorem ipsum dolor sit amet',
+            address: `${x + 21}, ${y - 22}`,
+            price: getRandomInteger(0, 100000),
+            type: getRoomType(HOUSE_TYPE),
+            rooms: getRandomInteger(0, 100),
+            guests: getRandomInteger(0, 100),
+            checkin: `${getRandomInteger(12, 14)}:00`,
+            checkout: `${getRandomInteger(12, 14)}:00`,
+            features: getUserArray(FEATURES),
+            description: 'Li Europan lingues es membres del sam familie. Lor separat existentie es un myth. Por scientie, musica, sport etc, litot',
+            photos: getUserArray(IMAGE_URLS)
+        },
 
-          offer: {
-              title: 'Lorem ipsum dolor sit amet',
-              address: `${x + 21}, ${y - 22}`,
-              price: getRandomInteger(0, 100000),
-              type: getRoomType(HOUSE_TYPE),
-              rooms: getRandomInteger(0, 100),
-              guests: getRandomInteger(0, 100),
-              checkin: `${getRandomInteger(12, 14)}:00`,
-              checkout: `${getRandomInteger(12, 14)}:00`,
-              features: getUserArray(FEATURES),
-              description: 'Li Europan lingues es membres del sam familie. Lor separat existentie es un myth. Por scientie, musica, sport etc, litot',
-              photos: getUserArray(IMAGE_URLS)
-          },
-
-          location: {
-              x: x,
-              y: y
-          }
+        location: {
+            x: x,
+            y: y
         }
-
-        adsList.push(user);
       }
 
-      return adsList;
+      adsList.push(user);
     }
+
+    return adsList;
   }
 
   /**
@@ -103,5 +100,10 @@
        userArray.push(randomElement);
      }
      return userArray;
+   }
+
+
+   window.data = {
+     generateAds: generateAds
    }
  })();

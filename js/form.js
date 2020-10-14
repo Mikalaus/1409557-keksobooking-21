@@ -1,74 +1,6 @@
 'use strict';
 
 (() => {
-
-  window.form = {
-    checkAdFormTypeSelect: () => {
-      let type = adFormTypeSelect.value;
-      if (type === 'bungalow') {
-        adFormPrice.placeholder = `${MIN_PRICE.BUNGALOW}`
-      } else if (type === 'flat') {
-        adFormPrice.placeholder = `${MIN_PRICE.FLAT}`
-      } else if (type === 'house') {
-        adFormPrice.placeholder = `${MIN_PRICE.HOUSE}`
-      } else if (type === 'palace') {
-        adFormPrice.placeholder = `${MIN_PRICE.PALACE}`
-      }
-    },
-
-    checkRoomNumberCapacity: () => {
-      let number = roomNumber.value;
-
-      capacityOptions.forEach((capacityOption) => {
-        capacityOption.setAttribute('disabled', 'disabled');
-        capacityOption.removeAttribute('selected');
-        if (capacityOption.value <= number && capacityOption.value !== '0' && number !== '100') {
-          capacityOption.removeAttribute('disabled');
-          capacityOption.selected = 'selected';
-        } else if (number === '100' && capacityOption.value === '0') {
-          capacityOption.removeAttribute('disabled');
-          capacityOption.selected = 'selected';
-        }
-      });
-    },
-
-    /**
-     * дезактивация полей ввода
-     * @param {string} - значение активации или дезактивации
-     */
-    controlInputForms: (control) => {
-
-      if (control === 'activate') {
-        adForm.classList.remove('ad-form--disabled')
-        adFormHeader.removeAttribute('disabled');
-        mapFeatures.removeAttribute('disabled');
-
-        mapFilterList.forEach((filter) => {
-          filter.removeAttribute('disabled');
-        });
-
-        adFormElements.forEach((element) => {
-          element.removeAttribute('disabled');
-        });
-
-      } else if (control === 'disable') {
-        adForm.classList.add('ad-form--disabled')
-        adFormHeader.setAttribute('disabled', 'disabled');
-        mapFeatures.setAttribute('disabled', 'disabled');
-
-        mapFilterList.forEach((filter) => {
-          filter.setAttribute('disabled', 'disabled');
-        });
-
-        adFormElements.forEach((element) => {
-          element.setAttribute('disabled', 'disabled');
-        });
-      } else {
-        alert('Введено неверное значение атрибута');
-      }
-    }
-  }
-
   const adFormTitle = document.querySelector('#title');
   const adFormPrice = document.querySelector('#price');
   const adFormTypeSelect = document.querySelector('#type');
@@ -87,11 +19,6 @@
   const mapFeatures = document.querySelector('.map__features');
   const adFormHeader = document.querySelector('.ad-form-header');
   const adFormElements = document.querySelectorAll('.ad-form__element');
-
-  window.PIN_OFFSET = {
-    LEFT: 33,
-    TOP: 12
-  }
 
   /**
    * минимальные стоимости проживания за одну ночь
@@ -118,6 +45,75 @@
    * максимальная цена за одну ночь
    */
   const MAX_PRICE = 1000000;
+
+  const checkAdFormTypeSelect = () => {
+    let type = adFormTypeSelect.value;
+    if (type === 'bungalow') {
+      adFormPrice.placeholder = MIN_PRICE.BUNGALOW
+      adFormPrice.setAttribute('min', MIN_PRICE.BUNGALOW);
+    } else if (type === 'flat') {
+      adFormPrice.placeholder = MIN_PRICE.FLAT
+      adFormPrice.setAttribute('min', MIN_PRICE.FLAT);
+    } else if (type === 'house') {
+      adFormPrice.placeholder = MIN_PRICE.HOUSE
+      adFormPrice.setAttribute('min', MIN_PRICE.HOUSE);
+    } else if (type === 'palace') {
+      adFormPrice.placeholder = MIN_PRICE.PALACE
+      adFormPrice.setAttribute('min', MIN_PRICE.PALACE);
+    }
+  }
+
+  const checkRoomNumberCapacity = () => {
+    let number = roomNumber.value;
+
+    capacityOptions.forEach((capacityOption) => {
+      capacityOption.setAttribute('disabled', 'disabled');
+      capacityOption.removeAttribute('selected');
+      if (capacityOption.value <= number && capacityOption.value !== '0' && number !== '100') {
+        capacityOption.removeAttribute('disabled');
+        capacityOption.selected = 'selected';
+      } else if (number === '100' && capacityOption.value === '0') {
+        capacityOption.removeAttribute('disabled');
+        capacityOption.selected = 'selected';
+      }
+    });
+  }
+
+  /**
+   * дезактивация полей ввода
+   * @param {boolean} - значение активации или дезактивации
+   */
+  const controlInputForms = (control) => {
+
+    if (control === true) {
+      adForm.classList.remove('ad-form--disabled')
+      adFormHeader.removeAttribute('disabled');
+      mapFeatures.removeAttribute('disabled');
+
+      mapFilterList.forEach((filter) => {
+        filter.removeAttribute('disabled');
+      });
+
+      adFormElements.forEach((element) => {
+        element.removeAttribute('disabled');
+      });
+
+    } else if (control === false) {
+      adForm.classList.add('ad-form--disabled')
+      adFormHeader.setAttribute('disabled', 'disabled');
+      mapFeatures.setAttribute('disabled', 'disabled');
+
+      mapFilterList.forEach((filter) => {
+        filter.setAttribute('disabled', 'disabled');
+      });
+
+      adFormElements.forEach((element) => {
+        element.setAttribute('disabled', 'disabled');
+      });
+    } else {
+      alert('Введено неверное значение атрибута');
+    }
+  }
 
   /**
    * проверяет валидность описания размещаемого объявления
@@ -155,17 +151,15 @@
 
     if (type === 'bungalow' && price < MIN_PRICE.BUNGALOW) {
       adFormPrice.setCustomValidity(`Вы не можете ввести значение ниже ${MIN_PRICE.BUNGALOW}`);
-      adFormPrice.placeholder = `${MIN_PRICE.BUNGALOW}`
     } else if (type === 'flat' && price < MIN_PRICE.FLAT) {
       adFormPrice.setCustomValidity(`Вы не можете ввести значение ниже ${MIN_PRICE.FLAT}`);
-      adFormPrice.placeholder = `${MIN_PRICE.FLAT}`
     } else if (type === 'house' && price < MIN_PRICE.HOUSE) {
       adFormPrice.setCustomValidity(`Вы не можете ввести значение ниже ${MIN_PRICE.HOUSE}`);
-      adFormPrice.placeholder = `${MIN_PRICE.HOUSE}`
     } else if (type === 'palace' && price < MIN_PRICE.PALACE) {
       adFormPrice.setCustomValidity(`Вы не можете ввести значение ниже ${MIN_PRICE.PALACE}`);
-      adFormPrice.placeholder = `${MIN_PRICE.PALACE}`
     }
+
+    checkAdFormTypeSelect();
 
     adFormPrice.reportValidity();
   });
@@ -175,29 +169,42 @@
    * @listens {change}
    */
   adFormTypeSelect.addEventListener('change', () => {
-    window.form.checkAdFormTypeSelect();
+    checkAdFormTypeSelect();
   });
+
+  /**
+   * cb для функции рассчета времени заезда/выезда
+   * @param {boolean} - true - in || false - out
+   */
+  const timeInChangeHandler = (bool) => {
+    let time;
+
+    if (bool === true){
+      time = adFormTimeIn.value;
+    } else if (bool === false) {
+      time = adFormTimeOut.value;
+    } else {
+      alert('Введено неверное значение аттрибута');
+    }
+
+
+    for (let i = 0; i < adFormTimeOutOptions.length; i++) {
+      adFormTimeOutOptions[i].removeAttribute('selected');
+      adFormTimeInOptions[i].removeAttribute('selected');
+      if (adFormTimeOutOptions[i].value === time) {
+        adFormTimeOutOptions[i].selected = 'selected';
+        adFormTimeInOptions[i].selected = 'selected';
+      }
+    }
+  }
+
 
   /**
    * проверяет value у adFormTimeIn, изменяет значение adFormTimeOut
    * @listens {change}
    */
   adFormTimeIn.addEventListener('change', () => {
-    let time = adFormTimeIn.value;
-    adFormTimeOutOptions.forEach((timeOutOption) => {
-      timeOutOption.removeAttribute('selected');
-      if (timeOutOption.value === time) {
-        timeOutOption.selected = 'selected';
-      }
-    });
-
-    adFormTimeInOptions.forEach((timeInOption) => {
-      timeInOption.removeAttribute('selected');
-      if (timeInOption.value === time) {
-        timeInOption.selected = 'selected';
-      }
-    });
-
+    timeInChangeHandler(true);
   });
 
   /**
@@ -205,21 +212,7 @@
    * @listens {change}
    */
   adFormTimeOut.addEventListener('change', () => {
-    let time = adFormTimeOut.value;
-    adFormTimeInOptions.forEach((timeInOption) => {
-      timeInOption.removeAttribute('selected');
-      if (timeInOption.value === time) {
-        timeInOption.selected = 'selected';
-      }
-    });
-
-    adFormTimeOutOptions.forEach((timeOutOption) => {
-      timeOutOption.removeAttribute('selected');
-      if (timeOutOption.value === time) {
-        timeOutOption.selected = 'selected';
-      }
-    });
-
+    timeInChangeHandler(false);
   });
 
   /**
@@ -227,8 +220,21 @@
    * @listens {change}
    */
   roomNumber.addEventListener('change', () => {
-    window.form.checkRoomNumberCapacity();
+    checkRoomNumberCapacity();
   });
 
-  window.form.controlInputForms('disable');
+  controlInputForms(false);
+
+  window.form = {
+    checkAdFormTypeSelect: checkAdFormTypeSelect,
+
+    checkRoomNumberCapacity: checkRoomNumberCapacity,
+
+    controlInputForms: controlInputForms,
+
+    PIN_OFFSET: {
+      LEFT: 33,
+      TOP: 12
+    }
+  }
 })();

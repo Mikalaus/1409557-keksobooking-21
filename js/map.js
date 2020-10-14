@@ -2,41 +2,6 @@
 
 (() => {
 
-  window.map = {
-
-    /**
-     * генерация меток на карте
-     * @param {Array} - массив объектов
-     */
-    generatePins: (adsList) => {
-      let pinsList = document.createDocumentFragment();
-      for (let i = 0; i < adsList.length; i++) {
-        let pin = pinTemplate.content.cloneNode(true);
-        let mapPin = pin.querySelector('.map__pin');
-        let mapPinImg = pin.querySelector('.map__pin img');
-        mapPin.style.left = `${adsList[i].location.x}px`;
-        mapPin.style.top = `${adsList[i].location.y}px`;
-        mapPinImg.src = adsList[i].author.avatar;
-        mapPinImg.alt = adsList[i].offer.title;
-        pinsList.appendChild(pin);
-      }
-
-      mapPins.appendChild(pinsList);
-    },
-
-    getLocation: (obj) => {
-      if (map.classList.contains('map--faded')){
-        let left = obj.style.left = (parseInt(obj.style.left,10));
-        let top =  obj.style.top = (parseInt(obj.style.top,10));
-        address.value = `${left}, ${top}`
-      } else {
-        let left = (parseInt(obj.style.left,10)) + window.PIN_OFFSET.LEFT;
-        let top = (parseInt(obj.style.top,10)) + window.PIN_OFFSET.TOP;
-        address.value = `${left}, ${top}`
-      }
-    }
-  }
-
   const mapPins = document.querySelector('.map__pins');
   const pinTemplate = document.querySelector('#pin');
   const map = document.querySelector('.map');
@@ -48,9 +13,46 @@
   const address = document.querySelector('#address');
   let mapPinList;
 
+  const RIGHT_CLICK_MOUSE = 1;
+  const ENTER = 'Enter';
+
+  /**
+   * генерация меток на карте
+   * @param {Array} - массив объектов
+   */
+  const generatePins = (adsList) => {
+    let pinsList = document.createDocumentFragment();
+    for (let i = 0; i < adsList.length; i++) {
+      let pin = pinTemplate.content.cloneNode(true);
+      let mapPin = pin.querySelector('.map__pin');
+      let mapPinImg = pin.querySelector('.map__pin img');
+      mapPin.style.left = `${adsList[i].location.x}px`;
+      mapPin.style.top = `${adsList[i].location.y}px`;
+      mapPinImg.src = adsList[i].author.avatar;
+      mapPinImg.alt = adsList[i].offer.title;
+      pinsList.appendChild(pin);
+    }
+
+    mapPins.appendChild(pinsList);
+
+    clickMapPins();
+  }
+
+  const getLocation = (obj) => {
+    if (map.classList.contains('map--faded')){
+      let left = obj.style.left = (parseInt(obj.style.left,10));
+      let top =  obj.style.top = (parseInt(obj.style.top,10));
+      address.value = `${left}, ${top}`
+    } else {
+      let left = (parseInt(obj.style.left,10)) + window.form.PIN_OFFSET.LEFT;
+      let top = (parseInt(obj.style.top,10)) + window.form.PIN_OFFSET.TOP;
+      address.value = `${left}, ${top}`
+    }
+  }
+
   let ads = window.data.generateAds(8);
 
-  window.map.getLocation(mainPin);
+  getLocation(mainPin);
 
   /**
    * cb для открытия карты и отрисовки меток
@@ -58,16 +60,16 @@
   const activateMap = () => {
     map.classList.remove('map--faded');
     window.map.generatePins(ads);
-    mapPinsClickHandler();
     window.form.checkAdFormTypeSelect();
     window.form.checkRoomNumberCapacity();
+    window.form.controlInputForms(true);
   }
 
   /**
    * функция для открытия popup
    * @param {number} - номер итерации цикла, перебирающего все метки на карте
    */
-  const openPopupByPinClickHandler = (i) => {
+  const openPopupByPinClick = (i) => {
     let popup = document.querySelector('.popup');
     if (popup !== null) {
       popup.remove();
@@ -87,7 +89,7 @@
   /**
    * функция для добавления EventListener на метки объявления, для открытия ads
    */
-  const mapPinsClickHandler = () => {
+  const clickMapPins = () => {
     mapPinList = document.querySelectorAll('.map__pin');
     for (let i = 1; i < mapPinList.length; i++) {
       /**
@@ -95,15 +97,15 @@
        */
       mapPinList[i].addEventListener('mousedown', (evt) => {
         evt.preventDefault();
-        openPopupByPinClickHandler(i);
+        openPopupByPinClick(i);
       });
 
       /**
        * открытие popup по нажатию с клавиатуры
        */
       mapPinList[i].addEventListener('keydown', function (evt) {
-        if (evt.key === 'Enter') {
-          openPopupByPinClickHandler(i);
+        if (evt.key === ENTER) {
+          openPopupByPinClick(i);
         }
       });
     }
@@ -124,11 +126,10 @@
    * @listens {keydown}
    */
   mainPin.addEventListener('keydown', function (evt) {
-    if (evt.key === 'Enter') {
+    if (evt.key === ENTER) {
       deletePins();
       activateMap();
       window.map.getLocation(mainPin);
-      controlInputForms('activate');
     }
   });
 
@@ -137,11 +138,16 @@
    * @listens {click}
    */
   mainPin.addEventListener('mousedown', function (evt) {
-    if (evt.which === 1) {
+    if (evt.which === RIGHT_CLICK_MOUSE) {
       deletePins();
       activateMap();
-      window.map.getLocation(mainPin);
-      window.form.controlInputForms('activate');
+      getLocation(mainPin);
     }
   });
+
+  window.map = {
+
+    generatePins: generatePins,
+    getLocation: getLocation
+  }
 })();

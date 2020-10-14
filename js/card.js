@@ -2,31 +2,29 @@
 
 (() => {
 
-  window.card = {
+  /**
+   * генерация объявления на карте
+   * @param {object} - объект создаваемого объявления
+   * @return {element} - объявление
+   */
+  const generateAd = (ad) => {
+    let popup = userPopup.content.cloneNode(true);
+    let popupFeatures = popup.querySelectorAll('.popup__feature');
 
-    /**
-     * генерация объявления на карте
-     * @param {object} - объект создаваемого объявления
-     * @return {element} - объявление
-     */
-    generateAd: (ad) => {
-      let popup = userPopup.content.cloneNode(true);
-      let popupFeatures = popup.querySelectorAll('.popup__feature');
+    popup.querySelector('.popup__title').textContent = ad.offer.title;
+    popup.querySelector('.popup__text--address').textContent = ad.offer.address;
+    popup.querySelector('.popup__text--price').textContent = `${ad.offer.price}₽/ночь`;
+    popup.querySelector('.popup__type').textContent = ad.offer.type;
+    popup.querySelector('.popup__text--capacity').textContent = `${ad.offer.rooms} комнаты для ${ad.offer.guests} гостей`;
+    popup.querySelector('.popup__text--time').textContent = `Заезд после ${ad.offer.checkin}, выезд до ${ad.offer.checkout}`;
+    transformFeatures(popup, popupFeatures, ad.offer.features);
+    transformImages(popup, ad.offer.photos);
+    popup.querySelector('.popup__description').textContent = ad.offer.description;
+    popup.querySelector('.popup__avatar').src = ad.author.avatar;
 
-      popup.querySelector('.popup__title').textContent = ad.offer.title;
-      popup.querySelector('.popup__text--address').textContent = ad.offer.address;
-      popup.querySelector('.popup__text--price').textContent = `${ad.offer.price}₽/ночь`;
-      popup.querySelector('.popup__type').textContent = ad.offer.type;
-      popup.querySelector('.popup__text--capacity').textContent = `${ad.offer.rooms} комнаты для ${ad.offer.guests} гостей`;
-      popup.querySelector('.popup__text--time').textContent = `Заезд после ${ad.offer.checkin}, выезд до ${ad.offer.checkout}`;
-      transformFeatures(popup, popupFeatures, ad.offer.features);
-      transformImages(popup, ad.offer.photos);
-      popup.querySelector('.popup__description').textContent = ad.offer.description;
-      popup.querySelector('.popup__avatar').src = ad.author.avatar;
-
-      return popup;
-    }
+    return popup;
   }
+
 
   const userPopup = document.querySelector('#card');
 
@@ -80,5 +78,10 @@
     } else {
       popupPhotos.remove();
     }
+  }
+
+  window.card = {
+
+    generateAd: generateAd
   }
 })();

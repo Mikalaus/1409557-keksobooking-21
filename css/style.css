@@ -1142,7 +1142,8 @@ fieldset {
  */
 
 .success,
-.error {
+.error,
+.server-error {
   position: fixed;
   top: 0;
   left: 0;
@@ -1161,6 +1162,10 @@ fieldset {
   vertical-align: middle;
 
   background-color: rgba(0, 0, 0, 0.8);
+}
+
+.server-error {
+  background-color: rgba(3, 3, 255, 0.9);
 }
 
 .success__message,

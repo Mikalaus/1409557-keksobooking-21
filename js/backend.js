@@ -5,12 +5,17 @@
   const DATA_URL_UPLOAD = 'https://21.javascript.pages.academy/keksobooking';
   const ESC = 'Escape';
   const errorTemplate = document.querySelector('#error');
+  const serverErrorTemplate = document.querySelector('#server-error');
   const successTemplate = document.querySelector('#success');
   const map = document.querySelector('.map');
 
-  const showError = (error) => {
+  /**
+   * Отображение ошибки при загрузке данных с сервера
+   * @param {string} - текст ошибки
+   */
+  const showServerError = (error) => {
     let err = error;
-    let errorMessage = errorTemplate.content.cloneNode(true);
+    let errorMessage = serverErrorTemplate.content.cloneNode(true);
 
     errorMessage.querySelector('.error__message').textContent = `Произошла ошибка! ${err}`;
 
@@ -22,6 +27,11 @@
     map.appendChild(errorMessage)
   }
 
+  /**
+   * cb по нажатию на escape
+   * @param {object} - удаляемый объект
+   * @param {boolean} - успешная/неуспешная загрузка
+   */
   const escHandler = (obj, success) => (evt) => {
     if (evt.key === ESC) {
       evt.preventDefault();
@@ -33,6 +43,11 @@
     }
   }
 
+  /**
+   * cb по нажатию на праввую кнопку мыши
+   * @param {object} - удаляемый объект
+   * @param {boolean} - успешная/неуспешная загрузка
+   */
   const mousedownHandler = (obj, success) => (evt) => {
     if (evt.which === 1) {
       evt.preventDefault();
@@ -44,6 +59,9 @@
     }
   }
 
+  /**
+   * Отображение ошибки при отправке формы
+   */
   const uploadFail = () => {
     let errorMessage = errorTemplate.content.cloneNode(true);
 
@@ -56,10 +74,13 @@
 
     let errorPopup = document.querySelector('.error');
 
-    document.addEventListener('keydown', errorEscHandler(errorPopup));
-    document.addEventListener('mousedown', errorMousedownHandler(errorPopup));
+    document.addEventListener('keydown', escHandler(errorPopup));
+    document.addEventListener('mousedown', mousedownHandler(errorPopup));
   }
 
+  /**
+   * Отображение попап при успешной отправке формы
+   */
   const uploadSuccess = () => {
     let successMessage = successTemplate.content.cloneNode(true);
 
@@ -110,6 +131,9 @@
     window.map.generatePins(adsList);
   }
 
+  /**
+   * Функция загрузки данных объявлений с сервера
+   */
   const load = () => {
     let xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
@@ -135,17 +159,17 @@
       }
 
       if (error) {
-        showError(error);
+        showServerError(error);
       }
 
     });
 
     xhr.addEventListener('error', () => {
-      showError('Произошла ошибка соединения');
+      showServerError('Произошла ошибка соединения');
     });
 
     xhr.addEventListener('timeout', () => {
-      showError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
+      showServerError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
     });
 
     xhr.timeout = 4000;
@@ -154,6 +178,11 @@
     xhr.send();
   }
 
+  /**
+   * Функция отправки данных объявлений пользователя на сервера
+   * @param {FormData} - данные формы
+   * @param {function} - что сделать при успешной выгрузки данных
+   */
   const upload = (data, onSuccess) => {
     let xhr = new XMLHttpRequest();
     xhr.responseType = 'json';

@@ -40,6 +40,10 @@
     clickMapPins(adsList);
   }
 
+  /**
+   * Функция получения координат метки
+   * @param {object} - метка
+   */
   const getLocation = (obj) => {
     if (map.classList.contains('map--faded')){
       let left = obj.style.left = (parseInt(obj.style.left,10));

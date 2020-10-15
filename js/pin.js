@@ -3,6 +3,9 @@
 (() => {
   const mainPin = document.querySelector('.map__pin--main');
 
+  /**
+   * Функция подсчета координат метки пользователя и перемещения ее по карте
+   */
   mainPin.addEventListener('mousedown', (evt) => {
     evt.preventDefault();
 

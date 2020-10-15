@@ -227,7 +227,7 @@
   controlInputForms(false);
 
   /**
-   * дезактиваци ястраницы после успешной отправки формы
+   * дезактивация страницы после успешной отправки формы
    * @listens {submit}
    */
   adForm.addEventListener('submit', (evt) => {

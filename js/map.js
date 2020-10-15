@@ -35,7 +35,7 @@
 
     mapPins.appendChild(pinsList);
 
-    clickMapPins();
+    clickMapPins(adsList);
   }
 
   const getLocation = (obj) => {
@@ -50,8 +50,6 @@
     }
   }
 
-  let ads = window.data.generateAds(8);
-
   getLocation(mainPin);
 
   /**
@@ -59,7 +57,7 @@
    */
   const activateMap = () => {
     map.classList.remove('map--faded');
-    window.map.generatePins(ads);
+    window.backend.load();
     window.form.checkAdFormTypeSelect();
     window.form.checkRoomNumberCapacity();
     window.form.controlInputForms(true);
@@ -69,7 +67,7 @@
    * функция для открытия popup
    * @param {number} - номер итерации цикла, перебирающего все метки на карте
    */
-  const openPopupByPinClick = (i) => {
+  const openPopupByPinClick = (i, ads) => {
     let popup = document.querySelector('.popup');
     if (popup !== null) {
       popup.remove();
@@ -89,7 +87,7 @@
   /**
    * функция для добавления EventListener на метки объявления, для открытия ads
    */
-  const clickMapPins = () => {
+  const clickMapPins = (ads) => {
     mapPinList = document.querySelectorAll('.map__pin');
     for (let i = 1; i < mapPinList.length; i++) {
       /**
@@ -97,13 +95,13 @@
        */
       mapPinList[i].addEventListener('mousedown', (evt) => {
         evt.preventDefault();
-        openPopupByPinClick(i);
+        openPopupByPinClick(i, ads);
       });
 
       /**
        * открытие popup по нажатию с клавиатуры
        */
-      mapPinList[i].addEventListener('keydown', function (evt) {
+      mapPinList[i].addEventListener('keydown', (evt) => {
         if (evt.key === ENTER) {
           openPopupByPinClick(i);
         }
@@ -125,7 +123,7 @@
    * проверяет нажатие на mainPin при отключенном функционале странице по нажатию на Enter
    * @listens {keydown}
    */
-  mainPin.addEventListener('keydown', function (evt) {
+  mainPin.addEventListener('keydown', (evt) => {
     if (evt.key === ENTER) {
       deletePins();
       activateMap();
@@ -137,7 +135,7 @@
    * проверяет нажатие на mainPin при отключенном функционале странице по нажатию на Enter
    * @listens {click}
    */
-  mainPin.addEventListener('mousedown', function (evt) {
+  mainPin.addEventListener('mousedown', (evt) => {
     if (evt.which === RIGHT_CLICK_MOUSE) {
       deletePins();
       activateMap();

@@ -1,6 +1,7 @@
 'use strict';
 
 (() => {
+  const map = document.querySelector('.map');
   const adFormTitle = document.querySelector('#title');
   const adFormPrice = document.querySelector('#price');
   const adFormTypeSelect = document.querySelector('#type');
@@ -224,6 +225,20 @@
   });
 
   controlInputForms(false);
+
+  /**
+   * дезактиваци ястраницы после успешной отправки формы
+   * @listens {submit}
+   */
+  adForm.addEventListener('submit', (evt) => {
+    window.backend.upload(new FormData(adForm), () => {
+      window.backend.uploadSuccess();
+      window.map.disableMap();
+      adForm.reset();
+    });
+
+    evt.preventDefault();
+  });
 
   window.form = {
     checkAdFormTypeSelect: checkAdFormTypeSelect,

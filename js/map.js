@@ -11,6 +11,8 @@
   const adForm = document.querySelector('.ad-form');
   const mapFilters = document.querySelector('.map__filters');
   const address = document.querySelector('#address');
+  const adFormTitle = document.querySelector('#title');
+  const adFormPrice = document.querySelector('#price');
   let mapPinList;
 
   const RIGHT_CLICK_MOUSE = 1;
@@ -61,6 +63,15 @@
     window.form.checkAdFormTypeSelect();
     window.form.checkRoomNumberCapacity();
     window.form.controlInputForms(true);
+  }
+
+  const disableMap = () => {
+    map.classList.add('map--faded');
+    window.form.controlInputForms(false);
+    deletePins();
+    mainPin.style.left = '570px';
+    mainPin.style.top = '375px';
+    getLocation(mainPin);
   }
 
   /**
@@ -114,6 +125,7 @@
    */
   const deletePins = () => {
     let pins = mapPins.querySelectorAll('button');
+
     for (let i = 1; i < pins.length; i++) {
       pins[i].remove();
     }
@@ -127,7 +139,7 @@
     if (evt.key === ENTER) {
       deletePins();
       activateMap();
-      window.map.getLocation(mainPin);
+      getLocation(mainPin);
     }
   });
 
@@ -146,6 +158,7 @@
   window.map = {
 
     generatePins: generatePins,
-    getLocation: getLocation
+    getLocation: getLocation,
+    disableMap: disableMap
   }
 })();

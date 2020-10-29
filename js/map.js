@@ -4,6 +4,7 @@
 
   const RIGHT_CLICK_MOUSE = 1;
   const ENTER = 'Enter';
+  const PINS_LIMIT = 5;
 
   const mapPins = document.querySelector('.map__pins');
   const pinTemplate = document.querySelector('#pin');
@@ -16,7 +17,29 @@
   const address = document.querySelector('#address');
   const adFormTitle = document.querySelector('#title');
   const adFormPrice = document.querySelector('#price');
+  const filtersSelectList = mapFilters.querySelectorAll('select');
+  const housingFeaturesSelect = mapFilters.querySelectorAll('#housing-features input');
   let mapPinList;
+  let xhrData;
+
+  /**
+   * cb для рендера объявлений при фильтрации
+   */
+  const switchSelectHandler = () => {
+    let popup = document.querySelector('.popup');
+    if (popup !== null) {
+      popup.remove();
+    }
+    generatePins(window.render.ads(xhrData));
+  }
+
+  filtersSelectList.forEach((filter) => {
+    filter.addEventListener('change', switchSelectHandler)
+  });
+
+  housingFeaturesSelect.forEach((filter) => {
+    filter.addEventListener('click', switchSelectHandler)
+  });
 
   /**
    * Функция получения дефолтных(начальных) координат метки
@@ -41,48 +64,48 @@
   }
 
   /**
+   * генерация меток на карте
+   * @param {Array} - массив объектов
+   */
+  const generatePins = (adsList) => {
+    deletePins();
+    let pinsList = document.createDocumentFragment();
+    for (let i = 0; i < PINS_LIMIT; i++) {
+      let pin = pinTemplate.content.cloneNode(true);
+      let mapPin = pin.querySelector('.map__pin');
+      let mapPinImg = pin.querySelector('.map__pin img');
+      mapPin.style.left = `${adsList[i].location.x}px`;
+      mapPin.style.top = `${adsList[i].location.y}px`;
+      mapPinImg.src = adsList[i].author.avatar;
+      mapPinImg.alt = adsList[i].offer.title;
+      pinsList.appendChild(pin);
+      /**
+       * открытие popup по нажатию с мышки
+       */
+      mapPin.addEventListener('mousedown', (evt) => {
+        evt.preventDefault();
+        openPopupByPinClick(i, adsList);
+      });
+
+      /**
+       * открытие popup по нажатию с клавиатуры
+       */
+      mapPin.addEventListener('keydown', (evt) => {
+        if (evt.key === ENTER) {
+          openPopupByPinClick(i, adsList);
+        }
+      });
+    }
+
+    mapPins.appendChild(pinsList);
+  }
+
+  /**
    * cb для открытия карты и отрисовки меток
    */
   const activateMap = () => {
     map.classList.remove('map--faded');
-    window.backend.load(
-
-      /**
-       * генерация меток на карте
-       * @param {Array} - массив объектов
-       */
-      (adsList) => {
-      let pinsList = document.createDocumentFragment();
-      for (let i = 0; i < adsList.length; i++) {
-        let pin = pinTemplate.content.cloneNode(true);
-        let mapPin = pin.querySelector('.map__pin');
-        let mapPinImg = pin.querySelector('.map__pin img');
-        mapPin.style.left = `${adsList[i].location.x}px`;
-        mapPin.style.top = `${adsList[i].location.y}px`;
-        mapPinImg.src = adsList[i].author.avatar;
-        mapPinImg.alt = adsList[i].offer.title;
-        pinsList.appendChild(pin);
-        /**
-         * открытие popup по нажатию с мышки
-         */
-        mapPin.addEventListener('mousedown', (evt) => {
-          evt.preventDefault();
-          openPopupByPinClick(i, adsList);
-        });
-
-        /**
-         * открытие popup по нажатию с клавиатуры
-         */
-        mapPin.addEventListener('keydown', (evt) => {
-          if (evt.key === ENTER) {
-            openPopupByPinClick(i, adsList);
-          }
-        });
-      }
-
-      mapPins.appendChild(pinsList);
-
-    });
+    window.backend.load((adsList) => { generatePins(adsList); xhrData = adsList; console.log(xhrData) });
     window.form.checkAdFormTypeSelect();
     window.form.checkRoomNumberCapacity();
     window.form.controlInputForms(true);

@@ -27,17 +27,17 @@
    * @type {Object}
    */
   const ROOM_CAPACITY = {
-    '1': [2],
-    '2': [1, 2],
-    '3': [0, 1, 2],
-    '100': [3]
+    1: [2],
+    2: [1, 2],
+    3: [0, 1, 2],
+    100: [3]
   }
 
   /**
    * минимальные стоимости проживания за одну ночь
    * @type {Object}
    */
-  const MIN_PRICE = {
+  const minPrice = {
     bungalow: 0,
     flat: 1000,
     house: 5000,
@@ -64,8 +64,8 @@
    */
   const checkAdFormTypeSelect = () => {
     let type = adFormTypeSelect.value;
-    adFormPrice.placeholder = MIN_PRICE[type]
-    adFormPrice.setAttribute('min', MIN_PRICE[type]);
+    adFormPrice.placeholder = minPrice[type]
+    adFormPrice.setAttribute('min', minPrice[type]);
   }
 
   /**
@@ -78,7 +78,7 @@
       capacityOption.setAttribute('disabled', 'disabled');
     });
 
-    ROOM_CAPACITY[number].forEach((index) => {
+    ROOM_CAPACITY[+number].forEach((index) => {
       capacityOptions[index].removeAttribute('disabled');
       capacityOptions[index].selected = 'selected';
     });
@@ -154,14 +154,14 @@
       adFormPrice.setCustomValidity('');
     }
 
-    if (type === 'bungalow' && price < MIN_PRICE.BUNGALOW) {
-      adFormPrice.setCustomValidity(`Вы не можете ввести значение ниже ${MIN_PRICE.BUNGALOW}`);
-    } else if (type === 'flat' && price < MIN_PRICE.FLAT) {
-      adFormPrice.setCustomValidity(`Вы не можете ввести значение ниже ${MIN_PRICE.FLAT}`);
-    } else if (type === 'house' && price < MIN_PRICE.HOUSE) {
-      adFormPrice.setCustomValidity(`Вы не можете ввести значение ниже ${MIN_PRICE.HOUSE}`);
-    } else if (type === 'palace' && price < MIN_PRICE.PALACE) {
-      adFormPrice.setCustomValidity(`Вы не можете ввести значение ниже ${MIN_PRICE.PALACE}`);
+    if (type === 'bungalow' && price < minPrice.BUNGALOW) {
+      adFormPrice.setCustomValidity(`Вы не можете ввести значение ниже ${minPrice.BUNGALOW}`);
+    } else if (type === 'flat' && price < minPrice.FLAT) {
+      adFormPrice.setCustomValidity(`Вы не можете ввести значение ниже ${minPrice.FLAT}`);
+    } else if (type === 'house' && price < minPrice.HOUSE) {
+      adFormPrice.setCustomValidity(`Вы не можете ввести значение ниже ${minPrice.HOUSE}`);
+    } else if (type === 'palace' && price < minPrice.PALACE) {
+      adFormPrice.setCustomValidity(`Вы не можете ввести значение ниже ${minPrice.PALACE}`);
     }
 
     checkAdFormTypeSelect();

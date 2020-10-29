@@ -1,6 +1,16 @@
 'use strict';
 
 (() => {
+
+  const escPopupHandler = (evt) => {
+    let popup = document.querySelector('.map__card');
+    if (popup !== null) {
+      popup.remove();
+    }
+
+    document.removeEventListener('keydown', escPopupHandler);
+  }
+
   /**
    * генерация объявления на карте
    * @param {object} - объект создаваемого объявления
@@ -20,6 +30,8 @@
     transformImages(popup, ad.offer.photos);
     popup.querySelector('.popup__description').textContent = ad.offer.description;
     popup.querySelector('.popup__avatar').src = ad.author.avatar;
+
+    document.addEventListener('keydown', escPopupHandler);
 
     return popup;
   }

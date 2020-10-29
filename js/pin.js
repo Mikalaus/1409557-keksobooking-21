@@ -3,10 +3,15 @@
 (() => {
   const mainPin = document.querySelector('.map__pin--main');
   const COORDINATES = {
-    minX: -33,
-    maxX: 1167,
-    minY: 118,
-    maxY: 618
+    MIN_X: 0,
+    MAX_X: 1200,
+    MIN_Y: 130,
+    MAX_Y: 630
+  }
+
+  const MAIN_PIN_SIZE = {
+    WIDTH: 66,
+    HEIGHT: 24
   }
 
   /**
@@ -33,11 +38,15 @@
         y: moveEvt.clientY
       };
 
-      if (mainPin.offsetLeft - shift.x >= COORDINATES.minX && mainPin.offsetLeft - shift.x <= COORDINATES.maxX) {
+      if (mainPin.offsetLeft - shift.x >= COORDINATES.MIN_X - MAIN_PIN_SIZE.WIDTH / 2 &&
+          mainPin.offsetLeft - shift.x <= COORDINATES.MAX_X - MAIN_PIN_SIZE.WIDTH / 2)
+      {
         mainPin.style.left = (mainPin.offsetLeft - shift.x) + 'px';
       }
 
-      if (mainPin.offsetTop - shift.y >= COORDINATES.minY && mainPin.offsetTop - shift.y <= COORDINATES.maxY) {
+      if (mainPin.offsetTop - shift.y >= COORDINATES.MIN_Y - MAIN_PIN_SIZE.HEIGHT / 2 &&
+          mainPin.offsetTop - shift.y <= COORDINATES.MAX_Y - MAIN_PIN_SIZE.HEIGHT / 2)
+      {
         mainPin.style.top = (mainPin.offsetTop - shift.y) + 'px';
       }
 

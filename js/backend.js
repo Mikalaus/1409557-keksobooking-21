@@ -4,12 +4,14 @@
   const DATA_URL_LOAD = 'https://21.javascript.pages.academy/keksobooking/data';
   const DATA_URL_UPLOAD = 'https://21.javascript.pages.academy/keksobooking';
   const ESC = 'Escape';
-  const SERVER = {
-    success: 200,
-    invalidInquiry: 400,
-    noAuthorization: 401,
-    nothingFound: 404
+  const SERVER_STATUS = {
+    SUCCESS: 200,
+    INVALID_INQUIRY: 400,
+    NO_AUTHORIZATION: 401,
+    NOTHING_FOUND: 404
   }
+
+  const SERVER_TIMEOUT = 1000;
 
   const errorTemplate = document.querySelector('#error');
   const serverErrorTemplate = document.querySelector('#server-error');
@@ -38,14 +40,9 @@
    * @param {object} - удаляемый объект
    * @param {boolean} - успешная/неуспешная загрузка
    */
-  const escHandler = (obj, success) => (evt) => {
+  const escHandler = (evt) => {
     if (evt.key === ESC) {
-      evt.preventDefault();
-      obj.remove();
-
-      if (success) {
-        location.reload(true);
-      }
+      deleteServerInfoPopus(evt);
     }
   }
 
@@ -54,15 +51,29 @@
    * @param {object} - удаляемый объект
    * @param {boolean} - успешная/неуспешная загрузка
    */
-  const mousedownHandler = (obj, success) => (evt) => {
+  const mousedownHandler = (evt) => {
     if (evt.which === 1) {
-      evt.preventDefault();
-      obj.remove();
-
-      if (success) {
-        location.reload(true);
-      }
+      deleteServerInfoPopus(evt);
     }
+  }
+
+  /**
+   * функция для удаления попапов при успешной выгрузке объявления и неудачной загрузки данных, а так же
+   * eventListener на документе
+   */
+  const deleteServerInfoPopus = (evt) => {
+    evt.preventDefault();
+    let errorPopup = document.querySelector('.error');
+    if (errorPopup !== null) {
+      errorPopup.remove();
+    }
+    let successPopup = document.querySelector('.success');
+    if (successPopup !== null) {
+      successPopup.remove();
+    }
+    successPopup.remove();
+    document.removeEventListener('keydown', escHandler);
+    document.removeEventListener('mousedown', mousedownHandler);
   }
 
   /**
@@ -78,10 +89,8 @@
 
     map.appendChild(errorMessage)
 
-    let errorPopup = document.querySelector('.error');
-
-    document.addEventListener('keydown', escHandler(errorPopup));
-    document.addEventListener('mousedown', mousedownHandler(errorPopup));
+    document.addEventListener('keydown', escHandler);
+    document.addEventListener('mousedown', mousedownHandler);
   }
 
   /**
@@ -92,77 +101,34 @@
 
     map.appendChild(successMessage)
 
-    let successPopup = document.querySelector('.success');
-
-    document.addEventListener('keydown', escHandler(successPopup, true));
-    document.addEventListener('mousedown', mousedownHandler(successPopup, true));
+    document.addEventListener('keydown', escHandler);
+    document.addEventListener('mousedown', mousedownHandler);
   }
 
-  /**
-   * генерация массива с информацией об объявлениях
-   * @param {Array} - массив с объектами (информацией об объявлениях)
-   * @return {Array} - массив объявлений
-   */
-  const generateAds = (adsInfo) => {
-    let adsList = [];
-    for (let i = 0; i < adsInfo.length; i++) {
-      let user = {
-        author: {
-          avatar: adsInfo[i].author.avatar
-        },
+  const checkXhrRequestErrors = (xhr, func = () => {}) => {
 
-        offer: {
-          title: adsInfo[i].offer.title,
-          address: adsInfo[i].offer.address,
-          price: adsInfo[i].offer.price,
-          type: adsInfo[i].offer.adsInfo,
-          rooms: adsInfo[i].offer.rooms,
-          guests: adsInfo[i].offer.guests,
-          checkin: adsInfo[i].offer.checkin,
-          checkout: adsInfo[i].offer.checkout,
-          features: adsInfo[i].offer.features,
-          description: adsInfo[i].offer.description,
-          photos: adsInfo[i].offer.photos
-        },
-
-        location: {
-          x: adsInfo[i].location.x,
-          y: adsInfo[i].location.y
-        }
-      }
-
-      adsList.push(user);
-    }
-
-    window.map.generatePins(adsList);
-  }
-
-  /**
-   * Функция загрузки данных объявлений с сервера
-   */
-  const load = () => {
-    let xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
     xhr.addEventListener('load', (evt) => {
       let error;
       switch (xhr.status) {
-        case SERVER.success:
-          generateAds(xhr.response);
+        case SERVER_STATUS.SUCCESS:
+          func(xhr.response);
           break;
-        case SERVER.invalidInquiry:
+        case SERVER_STATUS.INVALID_INQUIRY:
           error = 'Неверный запрос';
           break;
-        case SERVER.noAuthorization:
+        case SERVER_STATUS.NO_AUTHORIZATION:
           error = 'Пользователь не авторизован';
           break;
-        case SERVER.nothingFound:
+        case SERVER_STATUS.NOTHING_FOUND:
           error = 'Ничего не найдено';
           break;
 
         default:
           error = 'Cтатус ответа: : ' + xhr.status + ' ' + xhr.statusText;
       }
+
 
       if (error) {
         showServerError(error);
@@ -178,7 +144,16 @@
       showServerError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
     });
 
-    xhr.timeout = 1000;
+    xhr.timeout = SERVER_TIMEOUT;
+  }
+
+  /**
+   * Функция загрузки данных объявлений с сервера
+   */
+  const load = (onSuccess) => {
+    let xhr = new XMLHttpRequest();
+
+    checkXhrRequestErrors(xhr, onSuccess)
 
     xhr.open('GET', DATA_URL_LOAD);
     xhr.send();
@@ -191,43 +166,8 @@
    */
   const upload = (data, onSuccess) => {
     let xhr = new XMLHttpRequest();
-    xhr.responseType = 'json';
 
-    xhr.addEventListener('load', (evt) => {
-      let error;
-      switch (xhr.status) {
-        case SERVER.success:
-          onSuccess();
-          break;
-        case SERVER.invalidInquiry:
-          error = 'Неверный запрос';
-          break;
-        case SERVER.noAuthorization:
-          error = 'Пользователь не авторизован';
-          break;
-        case SERVER.nothingFound:
-          error = 'Ничего не найдено';
-          break;
-
-        default:
-          error = 'Cтатус ответа: : ' + xhr.status + ' ' + xhr.statusText;
-      }
-
-      if (error) {
-        uploadFail();
-      }
-
-    });
-
-    xhr.addEventListener('error', () => {
-      uploadFail();
-    });
-
-    xhr.addEventListener('timeout', () => {
-      uploadFail();
-    });
-
-    xhr.timeout = 1000;
+    checkXhrRequestErrors(xhr, onSuccess);
 
     xhr.open('POST', DATA_URL_UPLOAD);
     xhr.send(data);

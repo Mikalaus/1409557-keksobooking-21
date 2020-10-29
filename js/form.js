@@ -237,7 +237,7 @@
   adForm.addEventListener('submit', (evt) => {
     window.backend.upload(new FormData(adForm), () => {
       window.backend.uploadSuccess();
-      window.map.disableMap();
+      window.map.disable();
       adForm.reset();
     });
 

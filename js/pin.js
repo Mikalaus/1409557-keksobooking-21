@@ -2,6 +2,12 @@
 
 (() => {
   const mainPin = document.querySelector('.map__pin--main');
+  const COORDINATES = {
+    minX: -33,
+    maxX: 1167,
+    minY: 118,
+    maxY: 618
+  }
 
   /**
    * Функция подсчета координат метки пользователя и перемещения ее по карте
@@ -27,11 +33,11 @@
         y: moveEvt.clientY
       };
 
-      if (mainPin.offsetLeft - shift.x >= -33 && mainPin.offsetLeft - shift.x <= 1167) {
+      if (mainPin.offsetLeft - shift.x >= COORDINATES.minX && mainPin.offsetLeft - shift.x <= COORDINATES.maxX) {
         mainPin.style.left = (mainPin.offsetLeft - shift.x) + 'px';
       }
 
-      if (mainPin.offsetTop - shift.y >= 118 && mainPin.offsetTop - shift.y <= 618) {
+      if (mainPin.offsetTop - shift.y >= COORDINATES.minY && mainPin.offsetTop - shift.y <= COORDINATES.maxY) {
         mainPin.style.top = (mainPin.offsetTop - shift.y) + 'px';
       }
 

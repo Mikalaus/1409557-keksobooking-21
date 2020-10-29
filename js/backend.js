@@ -4,6 +4,13 @@
   const DATA_URL_LOAD = 'https://21.javascript.pages.academy/keksobooking/data';
   const DATA_URL_UPLOAD = 'https://21.javascript.pages.academy/keksobooking';
   const ESC = 'Escape';
+  const SERVER = {
+    success: 200,
+    invalidInquiry: 400,
+    noAuthorization: 401,
+    nothingFound: 404
+  }
+
   const errorTemplate = document.querySelector('#error');
   const serverErrorTemplate = document.querySelector('#server-error');
   const successTemplate = document.querySelector('#success');
@@ -13,11 +20,10 @@
    * Отображение ошибки при загрузке данных с сервера
    * @param {string} - текст ошибки
    */
-  const showServerError = (error) => {
-    let err = error;
+  const showServerError = (errorText) => {
     let errorMessage = serverErrorTemplate.content.cloneNode(true);
 
-    errorMessage.querySelector('.error__message').textContent = `Произошла ошибка! ${err}`;
+    errorMessage.querySelector('.error__message').textContent = `Произошла ошибка! ${errorText}`;
 
     errorMessage.querySelector('.error__button').addEventListener('click', (evt) => {
       evt.preventDefault();
@@ -94,7 +100,7 @@
 
   /**
    * генерация массива с информацией об объявлениях
-   * @param {number} - кол-во создаваемых объявлений
+   * @param {Array} - массив с объектами (информацией об объявлениях)
    * @return {Array} - массив объявлений
    */
   const generateAds = (adsInfo) => {
@@ -141,16 +147,16 @@
     xhr.addEventListener('load', (evt) => {
       let error;
       switch (xhr.status) {
-        case 200:
+        case SERVER.success:
           generateAds(xhr.response);
           break;
-        case 400:
+        case SERVER.invalidInquiry:
           error = 'Неверный запрос';
           break;
-        case 401:
+        case SERVER.noAuthorization:
           error = 'Пользователь не авторизован';
           break;
-        case 404:
+        case SERVER.nothingFound:
           error = 'Ничего не найдено';
           break;
 
@@ -172,7 +178,7 @@
       showServerError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
     });
 
-    xhr.timeout = 4000;
+    xhr.timeout = 1000;
 
     xhr.open('GET', DATA_URL_LOAD);
     xhr.send();
@@ -190,16 +196,16 @@
     xhr.addEventListener('load', (evt) => {
       let error;
       switch (xhr.status) {
-        case 200:
+        case SERVER.success:
           onSuccess();
           break;
-        case 400:
+        case SERVER.invalidInquiry:
           error = 'Неверный запрос';
           break;
-        case 401:
+        case SERVER.noAuthorization:
           error = 'Пользователь не авторизован';
           break;
-        case 404:
+        case SERVER.nothingFound:
           error = 'Ничего не найдено';
           break;
 
@@ -221,7 +227,7 @@
       uploadFail();
     });
 
-    xhr.timeout = 4000;
+    xhr.timeout = 1000;
 
     xhr.open('POST', DATA_URL_UPLOAD);
     xhr.send(data);

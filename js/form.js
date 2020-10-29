@@ -22,14 +22,26 @@
   const adFormElements = document.querySelectorAll('.ad-form__element');
 
   /**
+   * key = roomNumber.value для каждого селекта
+   * value = индексы массива кол-ва гостей для кол-ва комнат
+   * @type {Object}
+   */
+  const ROOM_CAPACITY = {
+    '1': [2],
+    '2': [1, 2],
+    '3': [0, 1, 2],
+    '100': [3]
+  }
+
+  /**
    * минимальные стоимости проживания за одну ночь
    * @type {Object}
    */
   const MIN_PRICE = {
-    BUNGALOW: 0,
-    FLAT: 1000,
-    HOUSE: 5000,
-    PALACE: 10000
+    bungalow: 0,
+    flat: 1000,
+    house: 5000,
+    palace: 10000
   }
 
   /**
@@ -47,36 +59,28 @@
    */
   const MAX_PRICE = 1000000;
 
+  /**
+   * функция изменения placeholder и min цены для каждого типа жилья
+   */
   const checkAdFormTypeSelect = () => {
     let type = adFormTypeSelect.value;
-    if (type === 'bungalow') {
-      adFormPrice.placeholder = MIN_PRICE.BUNGALOW
-      adFormPrice.setAttribute('min', MIN_PRICE.BUNGALOW);
-    } else if (type === 'flat') {
-      adFormPrice.placeholder = MIN_PRICE.FLAT
-      adFormPrice.setAttribute('min', MIN_PRICE.FLAT);
-    } else if (type === 'house') {
-      adFormPrice.placeholder = MIN_PRICE.HOUSE
-      adFormPrice.setAttribute('min', MIN_PRICE.HOUSE);
-    } else if (type === 'palace') {
-      adFormPrice.placeholder = MIN_PRICE.PALACE
-      adFormPrice.setAttribute('min', MIN_PRICE.PALACE);
-    }
+    adFormPrice.placeholder = MIN_PRICE[type]
+    adFormPrice.setAttribute('min', MIN_PRICE[type]);
   }
 
+  /**
+   * функция изменения кол-ва возможных гостей для каждого предоставленного кол-ва комнат
+   */
   const checkRoomNumberCapacity = () => {
     let number = roomNumber.value;
 
     capacityOptions.forEach((capacityOption) => {
       capacityOption.setAttribute('disabled', 'disabled');
-      capacityOption.removeAttribute('selected');
-      if (capacityOption.value <= number && capacityOption.value !== '0' && number !== '100') {
-        capacityOption.removeAttribute('disabled');
-        capacityOption.selected = 'selected';
-      } else if (number === '100' && capacityOption.value === '0') {
-        capacityOption.removeAttribute('disabled');
-        capacityOption.selected = 'selected';
-      }
+    });
+
+    ROOM_CAPACITY[number].forEach((index) => {
+      capacityOptions[index].removeAttribute('disabled');
+      capacityOptions[index].selected = 'selected';
     });
   }
 

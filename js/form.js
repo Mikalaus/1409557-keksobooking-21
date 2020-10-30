@@ -252,6 +252,10 @@ adForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
 });
 
+/**
+ * отображение загруженного превью аватара
+ * @listens {change}
+ */
 avatarInput.addEventListener('change', () => {
   let file = avatarInput.files[0];
   let fileName = file.name.toLowerCase();
@@ -271,6 +275,10 @@ avatarInput.addEventListener('change', () => {
   }
 });
 
+/**
+ * отображение загруженного превью квартиры
+ * @listens {change}
+ */
 houseImagesInput.addEventListener('change', () => {
   let file = houseImagesInput.files[0];
   let fileName = file.name.toLowerCase();

@@ -30,15 +30,30 @@
     if (popup !== null) {
       popup.remove();
     }
-    generatePins(window.render.ads(xhrData));
+    window.debounce(window.map.generatePins(window.render.ads(xhrData)));
   }
 
+  /**
+   * навешивание EventListener на все select формы фильтрации
+   */
   filtersSelectList.forEach((filter) => {
     filter.addEventListener('change', switchSelectHandler)
   });
 
+  /**
+   * навешивание EventListener на все checkbox формы фильтрации
+   */
   housingFeaturesSelect.forEach((filter) => {
-    filter.addEventListener('click', switchSelectHandler)
+    filter.addEventListener('click', () => {
+
+      filter.classList.toggle('checked');
+
+      let popup = document.querySelector('.popup');
+      if (popup !== null) {
+        popup.remove();
+      }
+      window.debounce(window.map.generatePins(window.render.ads(xhrData, housingFeaturesSelect)));
+    })
   });
 
   /**
@@ -105,7 +120,7 @@
    */
   const activateMap = () => {
     map.classList.remove('map--faded');
-    window.backend.load((adsList) => { generatePins(adsList); xhrData = adsList; console.log(xhrData) });
+    window.backend.load((adsList) => { generatePins(adsList); xhrData = adsList;});
     window.form.checkAdFormTypeSelect();
     window.form.checkRoomNumberCapacity();
     window.form.controlInputForms(true);
@@ -177,6 +192,7 @@
 
   window.map = {
 
+    generatePins: generatePins,
     getLocation: getLocation,
     disable: disableMap
   }

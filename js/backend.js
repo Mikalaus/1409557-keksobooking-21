@@ -4,7 +4,7 @@
   const DATA_URL_LOAD = 'https://21.javascript.pages.academy/keksobooking/data';
   const DATA_URL_UPLOAD = 'https://21.javascript.pages.academy/keksobooking';
   const ESC = 'Escape';
-  const SERVER_STATUS = {
+  const ServerStatus = {
     SUCCESS: 200,
     INVALID_INQUIRY: 400,
     NO_AUTHORIZATION: 401,
@@ -112,16 +112,16 @@
     xhr.addEventListener('load', (evt) => {
       let error;
       switch (xhr.status) {
-        case SERVER_STATUS.SUCCESS:
+        case ServerStatus.SUCCESS:
           func(xhr.response);
           break;
-        case SERVER_STATUS.INVALID_INQUIRY:
+        case ServerStatus.INVALID_INQUIRY:
           error = 'Неверный запрос';
           break;
-        case SERVER_STATUS.NO_AUTHORIZATION:
+        case ServerStatus.NO_AUTHORIZATION:
           error = 'Пользователь не авторизован';
           break;
-        case SERVER_STATUS.NOTHING_FOUND:
+        case ServerStatus.NOTHING_FOUND:
           error = 'Ничего не найдено';
           break;
 

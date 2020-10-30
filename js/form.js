@@ -26,7 +26,7 @@
    * value = индексы массива кол-ва гостей для кол-ва комнат
    * @type {Object}
    */
-  const ROOM_CAPACITY = {
+  const RoomCapacity = {
     1: [2],
     2: [1, 2],
     3: [0, 1, 2],
@@ -78,7 +78,7 @@
       capacityOption.setAttribute('disabled', 'disabled');
     });
 
-    ROOM_CAPACITY[+number].forEach((index) => {
+    RoomCapacity[+number].forEach((index) => {
       capacityOptions[index].removeAttribute('disabled');
       capacityOptions[index].selected = 'selected';
     });

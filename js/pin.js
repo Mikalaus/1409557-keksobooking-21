@@ -2,7 +2,7 @@
 
 (() => {
   const mainPin = document.querySelector('.map__pin--main');
-  const COORDINATES = {
+  const Coordinates = {
     MIN_X: 0,
     MAX_X: 1200,
     MIN_Y: 130,

@@ -2,6 +2,9 @@
 
 (() => {
 
+  const LOW_PRICE_LIMIT = 10000;
+  const HIGH_PRICE_START = 50000;
+
   const filters = document.querySelector('.map__filters');
   const filtersSelectList = filters.querySelectorAll('select');
   const housingFeaturesSelect = filters.querySelectorAll('#housing-features input');
@@ -9,16 +12,19 @@
   /**
    * функция выдачи ранга каждому объявлению, исходя из которого идет сортировка всех объявлений
    * @param {Object} - объявление
+   * @param {Object} - объявление
+   * @return {Number} - ранг обявления
    */
-  const getRank = (ad) => {
+  const getRank = (ad, filtersList) => {
     let rank = 0;
+    let extraRank = 0;
     let priceValue;
 
-    if (ad.offer.price < 10000) {
+    if (ad.offer.price < LOW_PRICE_LIMIT) {
       priceValue = 'low';
-    } else if (ad.offer.price >= 10000 && ad.offer.price <= 50000) {
+    } else if (ad.offer.price >= LOW_PRICE_LIMIT && ad.offer.price <= HIGH_PRICE_START) {
       priceValue = 'medium';
-    } else if (ad.offer.price > 50000) {
+    } else if (ad.offer.price > HIGH_PRICE_START) {
       priceValue = 'high';
     }
 
@@ -38,27 +44,25 @@
       rank++;
     }
 
-    housingFeaturesSelect.forEach((input) => {
-      console.log('а')
-      if (input.hasAttribute('checked')) {
-        console.log('ы')
-        ad.offer.features.forEach((feature) => {
-          if (feature === input.value) {
-            rank++;
-            console.log('d')
-          }
-        });
+    filtersList.forEach((filter) => {
+      if (ad.offer.features.indexOf(filter.value) !== -1 && filter.classList.contains('checked')) {
+        extraRank++;
       }
     });
 
-
-
-    return rank;
+    return rank + extraRank;
   }
 
-  const renderAds = (adsList) => {
+
+  /**
+   * функция рендера массива объявления с целью поиска наиболее похожих
+   * @param {Array} - массив объявлений
+   * @param {Array} - массив housingFeaturesSelect фильтров
+   * @return {Array} - отрендеренный массив
+   */
+  const renderAds = (adsList, filtersList = []) => {
     adsList.sort((left, right) => {
-      let rankDiff = getRank(right) - getRank(left);
+      let rankDiff = getRank(right, filtersList) - getRank(left, filtersList);
       return rankDiff;
     });
 
@@ -68,4 +72,5 @@
   window.render = {
     ads: renderAds
   }
+
 })();

@@ -9,7 +9,7 @@
     MAX_Y: 630
   }
 
-  const MAIN_PIN_SIZE = {
+  const MainPinSize = {
     WIDTH: 66,
     HEIGHT: 24
   }
@@ -38,14 +38,14 @@
         y: moveEvt.clientY
       };
 
-      if (mainPin.offsetLeft - shift.x >= COORDINATES.MIN_X - MAIN_PIN_SIZE.WIDTH / 2 &&
-          mainPin.offsetLeft - shift.x <= COORDINATES.MAX_X - MAIN_PIN_SIZE.WIDTH / 2)
+      if (mainPin.offsetLeft - shift.x >= Coordinates.MIN_X - MainPinSize.WIDTH / 2 &&
+          mainPin.offsetLeft - shift.x <= Coordinates.MAX_X - MainPinSize.WIDTH / 2)
       {
         mainPin.style.left = (mainPin.offsetLeft - shift.x) + 'px';
       }
 
-      if (mainPin.offsetTop - shift.y >= COORDINATES.MIN_Y - MAIN_PIN_SIZE.HEIGHT / 2 &&
-          mainPin.offsetTop - shift.y <= COORDINATES.MAX_Y - MAIN_PIN_SIZE.HEIGHT / 2)
+      if (mainPin.offsetTop - shift.y >= Coordinates.MIN_Y - MainPinSize.HEIGHT / 2 &&
+          mainPin.offsetTop - shift.y <= Coordinates.MAX_Y - MainPinSize.HEIGHT / 2)
       {
         mainPin.style.top = (mainPin.offsetTop - shift.y) + 'px';
       }

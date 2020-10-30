@@ -16,6 +16,7 @@
   const capacity = document.querySelector('#capacity')
   const capacityOptions = capacity.querySelectorAll('option');
 
+  const mapFilters = document.querySelector('.map__filters');
   const mapFilterList = document.querySelectorAll('.map__filter');
   const mapFeatures = document.querySelector('.map__features');
   const adFormHeader = document.querySelector('.ad-form-header');
@@ -239,6 +240,7 @@
       window.backend.uploadSuccess();
       window.map.disable();
       adForm.reset();
+      mapFilters.reset();
     });
 
     evt.preventDefault();

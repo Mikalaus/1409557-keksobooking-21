@@ -8,7 +8,7 @@ const ServerStatus = {
   INVALID_INQUIRY: 400,
   NO_AUTHORIZATION: 401,
   NOTHING_FOUND: 404
-}
+};
 
 const SERVER_TIMEOUT = 1000;
 
@@ -31,8 +31,8 @@ const showServerError = (errorText) => {
     location.reload(true);
   });
 
-  map.appendChild(errorMessage)
-}
+  map.appendChild(errorMessage);
+};
 
 /**
  * cb по нажатию на escape
@@ -43,7 +43,7 @@ const escHandler = (evt) => {
   if (evt.key === ESC) {
     deleteServerInfoPopus(evt);
   }
-}
+};
 
 /**
  * cb по нажатию на праввую кнопку мыши
@@ -54,7 +54,7 @@ const mousedownHandler = (evt) => {
   if (evt.which === 1) {
     deleteServerInfoPopus(evt);
   }
-}
+};
 
 /**
  * функция для удаления попапов при успешной выгрузке объявления и неудачной загрузки данных, а так же
@@ -73,7 +73,7 @@ const deleteServerInfoPopus = (evt) => {
   successPopup.remove();
   document.removeEventListener('keydown', escHandler);
   document.removeEventListener('mousedown', mousedownHandler);
-}
+};
 
 /**
  * Отображение ошибки при отправке формы
@@ -86,11 +86,11 @@ const uploadFail = () => {
     location.reload(true);
   });
 
-  map.appendChild(errorMessage)
+  map.appendChild(errorMessage);
 
   document.addEventListener('keydown', escHandler);
   document.addEventListener('mousedown', mousedownHandler);
-}
+};
 
 /**
  * Отображение попап при успешной отправке формы
@@ -98,17 +98,17 @@ const uploadFail = () => {
 const uploadSuccess = () => {
   let successMessage = successTemplate.content.cloneNode(true);
 
-  map.appendChild(successMessage)
+  map.appendChild(successMessage);
 
   document.addEventListener('keydown', escHandler);
   document.addEventListener('mousedown', mousedownHandler);
-}
+};
 
 const checkXhrRequestErrors = (xhr, func = () => {}) => {
 
   xhr.responseType = 'json';
 
-  xhr.addEventListener('load', (evt) => {
+  xhr.addEventListener('load', () => {
     let error;
     switch (xhr.status) {
       case ServerStatus.SUCCESS:
@@ -144,7 +144,7 @@ const checkXhrRequestErrors = (xhr, func = () => {}) => {
   });
 
   xhr.timeout = SERVER_TIMEOUT;
-}
+};
 
 /**
  * Функция загрузки данных объявлений с сервера
@@ -152,11 +152,11 @@ const checkXhrRequestErrors = (xhr, func = () => {}) => {
 const load = (onSuccess) => {
   let xhr = new XMLHttpRequest();
 
-  checkXhrRequestErrors(xhr, onSuccess)
+  checkXhrRequestErrors(xhr, onSuccess);
 
   xhr.open('GET', DATA_URL_LOAD);
   xhr.send();
-}
+};
 
 /**
  * Функция отправки данных объявлений пользователя на сервера
@@ -170,10 +170,10 @@ const upload = (data, onSuccess) => {
 
   xhr.open('POST', DATA_URL_UPLOAD);
   xhr.send(data);
-}
+};
 
 window.backend = {
   load: load,
   upload: upload,
   uploadSuccess: uploadSuccess
-}
+};

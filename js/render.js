@@ -6,7 +6,6 @@ const PINS_LIMIT = 5;
 
 const filters = document.querySelector('.map__filters');
 const filtersSelectList = filters.querySelectorAll('select');
-const housingFeaturesSelect = filters.querySelectorAll('#housing-features input');
 
 /**
  * функция выдачи ранга каждому объявлению, исходя из которого идет сортировка всех объявлений
@@ -53,7 +52,7 @@ const checkAd = (ad, filtersList) => {
   } else {
     return null;
   }
-}
+};
 
 /**
  * функция рендера массива объявления с целью поиска наиболее похожих
@@ -66,7 +65,7 @@ const renderAds = (adsList, filtersList = []) => {
   for (let i = 0; i < adsList.length; i++) {
     let renderedAd = checkAd(adsList[i], filtersList);
     if (renderedAd !== null) {
-      renderedList.push(renderedAd)
+      renderedList.push(renderedAd);
     }
     if (renderedList.length === PINS_LIMIT) {
       break;
@@ -74,8 +73,8 @@ const renderAds = (adsList, filtersList = []) => {
   }
 
   return renderedList;
-}
+};
 
 window.render = {
   ads: renderAds
-}
+};

@@ -10,7 +10,7 @@ const RoomCapacity = {
   2: [1, 2],
   3: [0, 1, 2],
   100: [3]
-}
+};
 
 /**
  * минимальные стоимости проживания за одну ночь
@@ -21,7 +21,7 @@ const minPrice = {
   flat: 1000,
   house: 5000,
   palace: 10000
-}
+};
 
 /**
  * Ограничения по вводу в главное описание добавляемого объявления
@@ -30,7 +30,7 @@ const minPrice = {
 const TitleLength = {
   MIN: 30,
   MAX: 100
-}
+};
 
 /**
  * @type {number}
@@ -40,7 +40,6 @@ const MAX_PRICE = 1000000;
 
 const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 
-const map = document.querySelector('.map');
 const adFormTitle = document.querySelector('#title');
 const adFormPrice = document.querySelector('#price');
 const adFormTypeSelect = document.querySelector('#type');
@@ -52,11 +51,9 @@ const adForm = document.querySelector('.ad-form');
 const formReset = document.querySelector('.ad-form__reset');
 
 const roomNumber = document.querySelector('#room_number');
-const roomNumberOptions = roomNumber.querySelectorAll('option');
-const capacity = document.querySelector('#capacity')
+const capacity = document.querySelector('#capacity');
 const capacityOptions = capacity.querySelectorAll('option');
 
-const mapFilters = document.querySelector('.map__filters');
 const mapFilterList = document.querySelectorAll('.map__filter');
 const mapFeatures = document.querySelector('.map__features');
 const adFormHeader = document.querySelector('.ad-form-header');
@@ -72,9 +69,9 @@ const houseImagePreview = document.querySelector('.ad-form__photo');
  */
 const checkAdFormTypeSelect = () => {
   let type = adFormTypeSelect.value;
-  adFormPrice.placeholder = minPrice[type]
+  adFormPrice.placeholder = minPrice[type];
   adFormPrice.setAttribute('min', minPrice[type]);
-}
+};
 
 /**
  * функция изменения кол-ва возможных гостей для каждого предоставленного кол-ва комнат
@@ -90,7 +87,7 @@ const checkRoomNumberCapacity = () => {
     capacityOptions[index].removeAttribute('disabled');
     capacityOptions[index].selected = 'selected';
   });
-}
+};
 
 /**
  * дезактивация полей ввода
@@ -99,7 +96,7 @@ const checkRoomNumberCapacity = () => {
 const controlInputForms = (control) => {
 
   if (control) {
-    adForm.classList.remove('ad-form--disabled')
+    adForm.classList.remove('ad-form--disabled');
     adFormHeader.removeAttribute('disabled');
     mapFeatures.removeAttribute('disabled');
 
@@ -112,7 +109,7 @@ const controlInputForms = (control) => {
     });
 
   } else {
-    adForm.classList.add('ad-form--disabled')
+    adForm.classList.add('ad-form--disabled');
     adFormHeader.setAttribute('disabled', 'disabled');
     mapFeatures.setAttribute('disabled', 'disabled');
 
@@ -124,7 +121,7 @@ const controlInputForms = (control) => {
       element.setAttribute('disabled', 'disabled');
     });
   }
-}
+};
 
 /**
  * проверяет валидность описания размещаемого объявления
@@ -134,9 +131,9 @@ adFormTitle.addEventListener('input', () => {
   let valueLength = adFormTitle.value.length;
 
   if (valueLength < TitleLength.MIN) {
-    adFormTitle.setCustomValidity('Ещё ' + (TitleLength.MIN - valueLength) +' симв.');
+    adFormTitle.setCustomValidity('Ещё ' + (TitleLength.MIN - valueLength) + ' симв.');
   } else if (valueLength > TitleLength.MAX) {
-    adFormTitle.setCustomValidity('Удалите лишние ' + (valueLength - TitleLength.MAX) +' симв.');
+    adFormTitle.setCustomValidity('Удалите лишние ' + (valueLength - TitleLength.MAX) + ' симв.');
   } else {
     adFormTitle.setCustomValidity('');
   }
@@ -205,7 +202,7 @@ const timeInChangeHandler = (bool) => {
       adFormTimeInOptions[i].selected = 'selected';
     }
   }
-}
+};
 
 
 /**
@@ -294,7 +291,7 @@ houseImagesInput.addEventListener('change', () => {
   }
 });
 
-formReset.addEventListener('click', window.map.disable)
+formReset.addEventListener('click', window.map.disable);
 
 window.form = {
   checkAdFormTypeSelect: checkAdFormTypeSelect,
@@ -302,4 +299,4 @@ window.form = {
   checkRoomNumberCapacity: checkRoomNumberCapacity,
 
   controlInputs: controlInputForms,
-}
+};

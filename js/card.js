@@ -5,16 +5,16 @@ const rusType = {
   palace: 'Дворец',
   flat: 'Квартира',
   house: 'Дом'
-}
+};
 
-const escPopupHandler = (evt) => {
+const escPopupHandler = () => {
   let popup = document.querySelector('.map__card');
   if (popup !== null) {
     popup.remove();
   }
 
   document.removeEventListener('keydown', escPopupHandler);
-}
+};
 
 /**
  * генерация объявления на карте
@@ -39,7 +39,7 @@ const generateAd = (ad) => {
   document.addEventListener('keydown', escPopupHandler);
 
   return popup;
-}
+};
 
 
 const userPopup = document.querySelector('#card');
@@ -61,14 +61,14 @@ const transformFeatures = (popup, htmlFeaturesArray, features) => {
             htmlFeaturesArray[i].remove();
           }
         } else {
-          break
+          break;
         }
       }
     }
   } else {
     popup.querySelector('.popup__features').remove();
   }
-}
+};
 
 /**
  * отображение изображений через разметку из массива изображений объявления
@@ -87,16 +87,16 @@ const transformImages = (popup, images) => {
         image.height = '40';
         image.classList.add('popup__photo');
         image.src = images[i];
-        image.alt= 'Фотография жилья';
+        image.alt = 'Фотография жилья';
         popupPhotos.appendChild(image);
       }
     }
   } else {
     popupPhotos.remove();
   }
-}
+};
 
 window.card = {
 
   generateAd: generateAd
-}
+};

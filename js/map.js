@@ -2,29 +2,26 @@
 
 const RIGHT_CLICK_MOUSE = 1;
 const ENTER = 'Enter';
-const PINS_LIMIT = 5;
 
 const pinOffset = {
   LEFT: 33,
   TOP: 12
-}
+};
 
 const mapPins = document.querySelector('.map__pins');
 const pinTemplate = document.querySelector('#pin');
 const map = document.querySelector('.map');
-const userPopup = document.querySelector('#card');
+
 const filtersContainer = document.querySelector('.map__filters-container');
 const mainPin = document.querySelector('.map__pin--main');
 const adForm = document.querySelector('.ad-form');
 const mapFilters = document.querySelector('.map__filters');
 const address = document.querySelector('#address');
-const adFormTitle = document.querySelector('#title');
-const adFormPrice = document.querySelector('#price');
+
 const filtersSelectList = mapFilters.querySelectorAll('select');
 const housingFeaturesSelect = mapFilters.querySelectorAll('#housing-features input');
 const avatarPreview = document.querySelector('.ad-form-header__preview img');
 const houseImagePreview = document.querySelector('.ad-form__photo');
-let mapPinList;
 let xhrData;
 
 /**
@@ -33,13 +30,13 @@ let xhrData;
 const switchSelectHandler = () => {
   removeAdPopup();
   window.debounce(window.map.generatePins(window.render.ads(xhrData)));
-}
+};
 
 /**
  * навешивание EventListener на все select формы фильтрации
  */
 filtersSelectList.forEach((filter) => {
-  filter.addEventListener('change', switchSelectHandler)
+  filter.addEventListener('change', switchSelectHandler);
 });
 
 /**
@@ -52,7 +49,7 @@ housingFeaturesSelect.forEach((filter) => {
 
     removeAdPopup();
     window.debounce(window.map.generatePins(window.render.ads(xhrData, housingFeaturesSelect)));
-  })
+  });
 });
 
 /**
@@ -60,10 +57,10 @@ housingFeaturesSelect.forEach((filter) => {
  * @param {object} - метка
  */
 const getStartLocation = (obj) => {
-  let left = obj.style.left = (parseInt(obj.style.left,10));
-  let top =  obj.style.top = (parseInt(obj.style.top,10));
-  address.value = `${left}, ${top}`
-}
+  let left = obj.style.left = (parseInt(obj.style.left, 10));
+  let top =  obj.style.top = (parseInt(obj.style.top, 10));
+  address.value = `${left}, ${top}`;
+};
 
 getStartLocation(mainPin);
 
@@ -72,10 +69,10 @@ getStartLocation(mainPin);
  * @param {object} - метка
  */
 const getLocation = (obj) => {
-  let left = (parseInt(obj.style.left,10)) + pinOffset.LEFT;
-  let top = (parseInt(obj.style.top,10)) + pinOffset.TOP;
-  address.value = `${left}, ${top}`
-}
+  let left = (parseInt(obj.style.left, 10)) + pinOffset.LEFT;
+  let top = (parseInt(obj.style.top, 10)) + pinOffset.TOP;
+  address.value = `${left}, ${top}`;
+};
 
 /**
  * генерация меток на карте
@@ -106,24 +103,27 @@ const generatePins = (adsList) => {
      */
     mapPin.addEventListener('keydown', (evt) => {
       if (evt.key === ENTER) {
-        openPopupByPinClick(i, adsList); //не знаю почему не работает, потому что функция вызывается и проходит до конца
+        openPopupByPinClick(i, adsList);  //не знаю почему не работает, потому что функция вызывается и проходит до конца
       }
     });
   }
 
   mapPins.appendChild(pinsList);
-}
+};
 
 /**
  * cb для открытия карты и отрисовки меток
  */
 const activateMap = () => {
   map.classList.remove('map--faded');
-  window.backend.load((adsList) => { window.map.generatePins(window.render.ads(adsList, housingFeaturesSelect)); xhrData = adsList;});
+  window.backend.load((adsList) => {
+    window.map.generatePins(window.render.ads(adsList, housingFeaturesSelect));
+    xhrData = adsList;
+  });
   window.form.checkAdFormTypeSelect();
   window.form.checkRoomNumberCapacity();
   window.form.controlInputs(true);
-}
+};
 
 const disableMap = () => {
   map.classList.add('map--faded');
@@ -140,14 +140,14 @@ const disableMap = () => {
   getStartLocation(mainPin);
   houseImagePreview.style.backgroundImage = 'none';
   avatarPreview.src = 'img/muffin-grey.svg';
-}
+};
 
 const removeAdPopup = () => {
   let popup = document.querySelector('.popup');
   if (popup !== null) {
     popup.remove();
   }
-}
+};
 
 /**
  * функция для открытия popup
@@ -167,7 +167,7 @@ const openPopupByPinClick = (i, ads) => {
     evt.preventDefault();
     popup.remove();
   });
-}
+};
 
 /**
  * удаление всех загружаемых меток на карте
@@ -178,7 +178,7 @@ const deletePins = () => {
   for (let i = 0; i < pins.length; i++) {
     pins[i].remove();
   }
-}
+};
 
 const mainPinActivateHandler = (evt) => {
   if (evt.key === ENTER || evt.which === RIGHT_CLICK_MOUSE) {
@@ -187,7 +187,7 @@ const mainPinActivateHandler = (evt) => {
     mainPin.removeEventListener('keydown', mainPinActivateHandler);
     mainPin.removeEventListener('mousedown', mainPinActivateHandler);
   }
-}
+};
 
 /**
  * проверяет нажатие на mainPin при отключенном функционале странице по нажатию на Enter
@@ -206,4 +206,4 @@ window.map = {
   generatePins: generatePins,
   getLocation: getLocation,
   disable: disableMap
-}
+};

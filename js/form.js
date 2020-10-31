@@ -27,7 +27,7 @@ const minPrice = {
  * Ограничения по вводу в главное описание добавляемого объявления
  * @type {Object}
  */
-const TITLE_LENGTH = {
+const TitleLength = {
   MIN: 30,
   MAX: 100
 }
@@ -49,6 +49,7 @@ const adFormTimeInOptions = adFormTimeIn.querySelectorAll('option');
 const adFormTimeOut = document.querySelector('#timeout');
 const adFormTimeOutOptions = adFormTimeOut.querySelectorAll('option');
 const adForm = document.querySelector('.ad-form');
+const formReset = document.querySelector('.ad-form__reset');
 
 const roomNumber = document.querySelector('#room_number');
 const roomNumberOptions = roomNumber.querySelectorAll('option');
@@ -97,7 +98,7 @@ const checkRoomNumberCapacity = () => {
  */
 const controlInputForms = (control) => {
 
-  if (control === true) {
+  if (control) {
     adForm.classList.remove('ad-form--disabled')
     adFormHeader.removeAttribute('disabled');
     mapFeatures.removeAttribute('disabled');
@@ -110,7 +111,7 @@ const controlInputForms = (control) => {
       element.removeAttribute('disabled');
     });
 
-  } else if (control === false) {
+  } else {
     adForm.classList.add('ad-form--disabled')
     adFormHeader.setAttribute('disabled', 'disabled');
     mapFeatures.setAttribute('disabled', 'disabled');
@@ -122,8 +123,6 @@ const controlInputForms = (control) => {
     adFormElements.forEach((element) => {
       element.setAttribute('disabled', 'disabled');
     });
-  } else {
-    alert('Введено неверное значение атрибута');
   }
 }
 
@@ -134,10 +133,10 @@ const controlInputForms = (control) => {
 adFormTitle.addEventListener('input', () => {
   let valueLength = adFormTitle.value.length;
 
-  if (valueLength < TITLE_LENGTH.MIN) {
-    adFormTitle.setCustomValidity('Ещё ' + (TITLE_LENGTH.MIN - valueLength) +' симв.');
-  } else if (valueLength > TITLE_LENGTH.MAX) {
-    adFormTitle.setCustomValidity('Удалите лишние ' + (valueLength - TITLE_LENGTH.MAX) +' симв.');
+  if (valueLength < TitleLength.MIN) {
+    adFormTitle.setCustomValidity('Ещё ' + (TitleLength.MIN - valueLength) +' симв.');
+  } else if (valueLength > TitleLength.MAX) {
+    adFormTitle.setCustomValidity('Удалите лишние ' + (valueLength - TitleLength.MAX) +' симв.');
   } else {
     adFormTitle.setCustomValidity('');
   }
@@ -191,12 +190,10 @@ adFormTypeSelect.addEventListener('change', () => {
 const timeInChangeHandler = (bool) => {
   let time;
 
-  if (bool === true){
+  if (bool) {
     time = adFormTimeIn.value;
-  } else if (bool === false) {
-    time = adFormTimeOut.value;
   } else {
-    alert('Введено неверное значение аттрибута');
+    time = adFormTimeOut.value;
   }
 
 
@@ -245,8 +242,6 @@ adForm.addEventListener('submit', (evt) => {
   window.backend.upload(new FormData(adForm), () => {
     window.backend.uploadSuccess();
     window.map.disable();
-    adForm.reset();
-    mapFilters.reset();
   });
 
   evt.preventDefault();
@@ -299,10 +294,12 @@ houseImagesInput.addEventListener('change', () => {
   }
 });
 
+formReset.addEventListener('click', window.map.disable)
+
 window.form = {
   checkAdFormTypeSelect: checkAdFormTypeSelect,
 
   checkRoomNumberCapacity: checkRoomNumberCapacity,
 
-  controlInputForms: controlInputForms,
+  controlInputs: controlInputForms,
 }

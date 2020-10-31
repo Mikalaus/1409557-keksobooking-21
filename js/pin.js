@@ -10,7 +10,7 @@ const Coordinates = {
 
 const MainPinSize = {
   WIDTH: 66,
-  HEIGHT: 24
+  HEIGHT: 74
 }
 
 /**

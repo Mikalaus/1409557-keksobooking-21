@@ -4,7 +4,7 @@ const RIGHT_CLICK_MOUSE = 1;
 const ENTER = 'Enter';
 const PINS_LIMIT = 5;
 
-const PIN_OFFSET = {
+const pinOffset = {
   LEFT: 33,
   TOP: 12
 }
@@ -22,6 +22,8 @@ const adFormTitle = document.querySelector('#title');
 const adFormPrice = document.querySelector('#price');
 const filtersSelectList = mapFilters.querySelectorAll('select');
 const housingFeaturesSelect = mapFilters.querySelectorAll('#housing-features input');
+const avatarPreview = document.querySelector('.ad-form-header__preview img');
+const houseImagePreview = document.querySelector('.ad-form__photo');
 let mapPinList;
 let xhrData;
 
@@ -29,10 +31,7 @@ let xhrData;
  * cb для рендера объявлений при фильтрации
  */
 const switchSelectHandler = () => {
-  let popup = document.querySelector('.popup');
-  if (popup !== null) {
-    popup.remove();
-  }
+  removeAdPopup();
   window.debounce(window.map.generatePins(window.render.ads(xhrData)));
 }
 
@@ -51,10 +50,7 @@ housingFeaturesSelect.forEach((filter) => {
 
     filter.classList.toggle('checked');
 
-    let popup = document.querySelector('.popup');
-    if (popup !== null) {
-      popup.remove();
-    }
+    removeAdPopup();
     window.debounce(window.map.generatePins(window.render.ads(xhrData, housingFeaturesSelect)));
   })
 });
@@ -76,8 +72,8 @@ getStartLocation(mainPin);
  * @param {object} - метка
  */
 const getLocation = (obj) => {
-  let left = (parseInt(obj.style.left,10)) + PIN_OFFSET.LEFT;
-  let top = (parseInt(obj.style.top,10)) + PIN_OFFSET.TOP;
+  let left = (parseInt(obj.style.left,10)) + pinOffset.LEFT;
+  let top = (parseInt(obj.style.top,10)) + pinOffset.TOP;
   address.value = `${left}, ${top}`
 }
 
@@ -88,7 +84,7 @@ const getLocation = (obj) => {
 const generatePins = (adsList) => {
   deletePins();
   let pinsList = document.createDocumentFragment();
-  for (let i = 0; i < PINS_LIMIT; i++) {
+  for (let i = 0; i < adsList.length; i++) {
     let pin = pinTemplate.content.cloneNode(true);
     let mapPin = pin.querySelector('.map__pin');
     let mapPinImg = pin.querySelector('.map__pin img');
@@ -110,7 +106,7 @@ const generatePins = (adsList) => {
      */
     mapPin.addEventListener('keydown', (evt) => {
       if (evt.key === ENTER) {
-        openPopupByPinClick(i, adsList);
+        openPopupByPinClick(i, adsList); //не знаю почему не работает, потому что функция вызывается и проходит до конца
       }
     });
   }
@@ -123,32 +119,44 @@ const generatePins = (adsList) => {
  */
 const activateMap = () => {
   map.classList.remove('map--faded');
-  window.backend.load((adsList) => { generatePins(adsList); xhrData = adsList;});
+  window.backend.load((adsList) => { window.map.generatePins(window.render.ads(adsList, housingFeaturesSelect)); xhrData = adsList;});
   window.form.checkAdFormTypeSelect();
   window.form.checkRoomNumberCapacity();
-  window.form.controlInputForms(true);
+  window.form.controlInputs(true);
 }
 
 const disableMap = () => {
   map.classList.add('map--faded');
-  window.form.controlInputForms(false);
+  window.form.controlInputs(false);
   deletePins();
-  mainPin.style.left = '570px';
-  mainPin.style.top = '375px';
   getLocation(mainPin);
+  removeAdPopup();
   mainPin.addEventListener('keydown', mainPinActivateHandler);
   mainPin.addEventListener('mousedown', mainPinActivateHandler);
+  adForm.reset();
+  mapFilters.reset();
+  mainPin.style.left = '570px';
+  mainPin.style.top = '375px';
+  getStartLocation(mainPin);
+  houseImagePreview.style.backgroundImage = 'none';
+  avatarPreview.src = 'img/muffin-grey.svg';
+}
+
+const removeAdPopup = () => {
+  let popup = document.querySelector('.popup');
+  if (popup !== null) {
+    popup.remove();
+  }
 }
 
 /**
  * функция для открытия popup
  * @param {number} - номер итерации цикла, перебирающего все метки на карте
+ * @param {Array} - массив карточек объявлений
  */
 const openPopupByPinClick = (i, ads) => {
+  removeAdPopup();
   let popup = document.querySelector('.popup');
-  if (popup !== null) {
-    popup.remove();
-  }
   map.insertBefore(window.card.generateAd(ads[i]), filtersContainer);
   popup = document.querySelector('.popup');
 

@@ -1,5 +1,12 @@
 'use strict';
 
+const rusType = {
+  bugalow: 'Бунгало',
+  palace: 'Дворец',
+  flat: 'Квартира',
+  house: 'Дом'
+}
+
 const escPopupHandler = (evt) => {
   let popup = document.querySelector('.map__card');
   if (popup !== null) {
@@ -21,7 +28,7 @@ const generateAd = (ad) => {
   popup.querySelector('.popup__title').textContent = ad.offer.title;
   popup.querySelector('.popup__text--address').textContent = ad.offer.address;
   popup.querySelector('.popup__text--price').textContent = `${ad.offer.price}₽/ночь`;
-  popup.querySelector('.popup__type').textContent = ad.offer.type;
+  popup.querySelector('.popup__type').textContent = rusType[ad.offer.type];
   popup.querySelector('.popup__text--capacity').textContent = `${ad.offer.rooms} комнаты для ${ad.offer.guests} гостей`;
   popup.querySelector('.popup__text--time').textContent = `Заезд после ${ad.offer.checkin}, выезд до ${ad.offer.checkout}`;
   transformFeatures(popup, popupFeatures, ad.offer.features);

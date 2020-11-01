@@ -12,7 +12,6 @@ const ServerStatus = {
 
 const SERVER_TIMEOUT = 1000;
 
-const errorTemplate = document.querySelector('#error');
 const serverErrorTemplate = document.querySelector('#server-error');
 const successTemplate = document.querySelector('#success');
 const map = document.querySelector('.map');
@@ -36,7 +35,7 @@ const showServerError = (errorText) => {
 
 /**
  * cb по нажатию на escape
- * @param {evt}
+ * @param {Object}
  */
 const escHandler = (evt) => {
   if (evt.key === ESC) {
@@ -46,7 +45,7 @@ const escHandler = (evt) => {
 
 /**
  * cb по нажатию на праввую кнопку мыши
- * @param {evt}
+ * @param {Object}
  */
 const mousedownHandler = (evt) => {
   if (evt.which === 1) {
@@ -57,7 +56,7 @@ const mousedownHandler = (evt) => {
 /**
  * функция для удаления попапов при успешной выгрузке объявления и неудачной загрузки данных, а так же
  * eventListener на документе
- * @param {evt}
+ * @param {Object}
  */
 const deleteServerInfoPopus = (evt) => {
   evt.preventDefault();

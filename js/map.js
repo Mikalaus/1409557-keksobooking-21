@@ -58,7 +58,7 @@ housingFeaturesSelect.forEach((filter) => {
  */
 const getStartLocation = (obj) => {
   let left = obj.style.left = (parseInt(obj.style.left, 10));
-  let top =  obj.style.top = (parseInt(obj.style.top, 10));
+  let top = obj.style.top = (parseInt(obj.style.top, 10));
   address.value = `${left}, ${top}`;
 };
 
@@ -103,7 +103,7 @@ const generatePins = (adsList) => {
      */
     mapPin.addEventListener('keydown', (evt) => {
       if (evt.key === ENTER) {
-        openPopupByPinClick(i, adsList);  //не знаю почему не работает, потому что функция вызывается и проходит до конца
+        openPopupByPinClick(i, adsList);
       }
     });
   }

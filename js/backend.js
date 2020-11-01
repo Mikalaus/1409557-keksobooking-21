@@ -19,7 +19,7 @@ const map = document.querySelector('.map');
 
 /**
  * Отображение ошибки при загрузке данных с сервера
- * @param {string} - текст ошибки
+ * @param {String} - текст ошибки
  */
 const showServerError = (errorText) => {
   let errorMessage = serverErrorTemplate.content.cloneNode(true);
@@ -36,8 +36,7 @@ const showServerError = (errorText) => {
 
 /**
  * cb по нажатию на escape
- * @param {object} - удаляемый объект
- * @param {boolean} - успешная/неуспешная загрузка
+ * @param {evt}
  */
 const escHandler = (evt) => {
   if (evt.key === ESC) {
@@ -47,8 +46,7 @@ const escHandler = (evt) => {
 
 /**
  * cb по нажатию на праввую кнопку мыши
- * @param {object} - удаляемый объект
- * @param {boolean} - успешная/неуспешная загрузка
+ * @param {evt}
  */
 const mousedownHandler = (evt) => {
   if (evt.which === 1) {
@@ -59,6 +57,7 @@ const mousedownHandler = (evt) => {
 /**
  * функция для удаления попапов при успешной выгрузке объявления и неудачной загрузки данных, а так же
  * eventListener на документе
+ * @param {evt}
  */
 const deleteServerInfoPopus = (evt) => {
   evt.preventDefault();
@@ -73,23 +72,6 @@ const deleteServerInfoPopus = (evt) => {
   successPopup.remove();
   document.removeEventListener('keydown', escHandler);
   document.removeEventListener('mousedown', mousedownHandler);
-};
-
-/**
- * Отображение ошибки при отправке формы
- */
-const uploadFail = () => {
-  let errorMessage = errorTemplate.content.cloneNode(true);
-
-  errorMessage.querySelector('.error__button').addEventListener('click', (evt) => {
-    evt.preventDefault();
-    location.reload(true);
-  });
-
-  map.appendChild(errorMessage);
-
-  document.addEventListener('keydown', escHandler);
-  document.addEventListener('mousedown', mousedownHandler);
 };
 
 /**
@@ -148,6 +130,7 @@ const checkXhrRequestErrors = (xhr, func = () => {}) => {
 
 /**
  * Функция загрузки данных объявлений с сервера
+ * @param {function} - при успешной загрузке
  */
 const load = (onSuccess) => {
   let xhr = new XMLHttpRequest();

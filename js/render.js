@@ -33,11 +33,11 @@ const checkAd = (ad, filtersList) => {
     isSame = false;
   }
 
-  if (filtersSelectList[2].value !== ad.offer.rooms && filtersSelectList[2].value !== 'any') {
+  if (+filtersSelectList[2].value !== ad.offer.rooms && filtersSelectList[2].value !== 'any') {
     isSame = false;
   }
 
-  if (filtersSelectList[3].value !== ad.offer.guests && filtersSelectList[3].value !== 'any') {
+  if (+filtersSelectList[3].value !== ad.offer.guests && filtersSelectList[3].value !== 'any') {
     isSame = false;
   }
 

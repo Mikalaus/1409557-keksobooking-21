@@ -18,7 +18,7 @@ const escPopupHandler = () => {
 
 /**
  * генерация объявления на карте
- * @param {object} - объект создаваемого объявления
+ * @param {Object} - объект создаваемого объявления
  * @return {element} - объявление
  */
 const generateAd = (ad) => {

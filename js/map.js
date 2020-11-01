@@ -2,6 +2,7 @@
 
 const RIGHT_CLICK_MOUSE = 1;
 const ENTER = 'Enter';
+const SPACE = 32
 
 const pinOffset = {
   LEFT: 33,
@@ -91,18 +92,10 @@ const generatePins = (adsList) => {
     mapPinImg.alt = adsList[i].offer.title;
     pinsList.appendChild(pin);
     /**
-     * открытие popup по нажатию с мышки
+     * открытие popup по нажатию с мышки и клавиатуры
      */
-    mapPin.addEventListener('mousedown', (evt) => {
-      evt.preventDefault();
-      openPopupByPinClick(i, adsList);
-    });
-
-    /**
-     * открытие popup по нажатию с клавиатуры
-     */
-    mapPin.addEventListener('keydown', (evt) => {
-      if (evt.key === ENTER) {
+    mapPin.addEventListener('click', (evt) => {
+      if (evt.which !== SPACE) {
         openPopupByPinClick(i, adsList);
       }
     });
@@ -156,9 +149,8 @@ const removeAdPopup = () => {
  */
 const openPopupByPinClick = (i, ads) => {
   removeAdPopup();
-  let popup = document.querySelector('.popup');
   map.insertBefore(window.card.generateAd(ads[i]), filtersContainer);
-  popup = document.querySelector('.popup');
+  let popup = document.querySelector('.popup');
 
   /**
    * удаление popup по нажатию на крестик

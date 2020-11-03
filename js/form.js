@@ -16,7 +16,7 @@ const RoomCapacity = {
  * минимальные стоимости проживания за одну ночь
  * @type {Object}
  */
-const minPrice = {
+const MinPrice = {
   bungalow: 0,
   flat: 1000,
   house: 5000,
@@ -69,8 +69,8 @@ const houseImagePreview = document.querySelector('.ad-form__photo');
  */
 const checkAdFormTypeSelect = () => {
   let type = adFormTypeSelect.value;
-  adFormPrice.placeholder = minPrice[type];
-  adFormPrice.setAttribute('min', minPrice[type]);
+  adFormPrice.placeholder = MinPrice[type];
+  adFormPrice.setAttribute('min', MinPrice[type]);
 };
 
 /**
@@ -157,14 +157,14 @@ adFormPrice.addEventListener('input', () => {
     adFormPrice.setCustomValidity('');
   }
 
-  if (type === 'bungalow' && price < minPrice.BUNGALOW) {
-    adFormPrice.setCustomValidity(`Вы не можете ввести значение ниже ${minPrice.BUNGALOW}`);
-  } else if (type === 'flat' && price < minPrice.FLAT) {
-    adFormPrice.setCustomValidity(`Вы не можете ввести значение ниже ${minPrice.FLAT}`);
-  } else if (type === 'house' && price < minPrice.HOUSE) {
-    adFormPrice.setCustomValidity(`Вы не можете ввести значение ниже ${minPrice.HOUSE}`);
-  } else if (type === 'palace' && price < minPrice.PALACE) {
-    adFormPrice.setCustomValidity(`Вы не можете ввести значение ниже ${minPrice.PALACE}`);
+  if (type === 'bungalow' && price < MinPrice.bungalow) {
+    adFormPrice.setCustomValidity(`Вы не можете ввести значение ниже ${MinPrice.bungalow}`);
+  } else if (type === 'flat' && price < MinPrice.flat) {
+    adFormPrice.setCustomValidity(`Вы не можете ввести значение ниже ${MinPrice.flat}`);
+  } else if (type === 'house' && price < MinPrice.house) {
+    adFormPrice.setCustomValidity(`Вы не можете ввести значение ниже ${MinPrice.house}`);
+  } else if (type === 'palace' && price < MinPrice.palace) {
+    adFormPrice.setCustomValidity(`Вы не можете ввести значение ниже ${MinPrice.palace}`);
   }
 
   checkAdFormTypeSelect();

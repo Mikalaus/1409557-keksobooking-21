@@ -9,6 +9,11 @@ const RusType = {
   house: 'Дом'
 };
 
+const ImageSize = {
+  width: '45',
+  height: '40'
+};
+
 const escPopupHandler = (evt) => {
   if (evt.key === ESC) {
     let popup = document.querySelector('.map__card');
@@ -87,8 +92,8 @@ const transformImages = (popup, images) => {
         popupPhoto.src = images[i];
       } else {
         let image = document.createElement('img');
-        image.width = '45';
-        image.height = '40';
+        image.width = ImageSize.width;
+        image.height = ImageSize.height;
         image.classList.add('popup__photo');
         image.src = images[i];
         image.alt = 'Фотография жилья';

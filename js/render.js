@@ -5,6 +5,12 @@ const HIGH_PRICE_START = 50000;
 const PINS_LIMIT = 5;
 const DEFAULT_FILTER = 'any';
 
+const PriceValue = {
+  low: 'low',
+  med: 'middle',
+  high: 'high'
+};
+
 const filters = document.querySelector('.map__filters');
 const filtersSelectList = filters.querySelectorAll('select');
 
@@ -19,11 +25,11 @@ const checkAd = (ad, filtersList) => {
   let priceValue;
 
   if (ad.offer.price < LOW_PRICE_LIMIT) {
-    priceValue = 'low';
+    priceValue = PriceValue.low;
   } else if (ad.offer.price >= LOW_PRICE_LIMIT && ad.offer.price <= HIGH_PRICE_START) {
-    priceValue = 'medium';
+    priceValue = PriceValue.med;
   } else if (ad.offer.price > HIGH_PRICE_START) {
-    priceValue = 'high';
+    priceValue = PriceValue.high;
   }
 
   if (filtersSelectList[0].value !== ad.offer.type && filtersSelectList[0].value !== DEFAULT_FILTER) {

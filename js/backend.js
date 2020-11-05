@@ -3,11 +3,16 @@
 const DATA_URL_LOAD = 'https://21.javascript.pages.academy/keksobooking/data';
 const DATA_URL_UPLOAD = 'https://21.javascript.pages.academy/keksobooking';
 const ESC = 'Escape';
-const ServerStatus = {
+const ServerRequestStatus = {
   SUCCESS: 200,
   INVALID_INQUIRY: 400,
   NO_AUTHORIZATION: 401,
   NOTHING_FOUND: 404
+};
+
+const ServerRequest = {
+  get: 'GET',
+  post: 'POST'
 };
 
 const SERVER_TIMEOUT = 1000;
@@ -92,16 +97,16 @@ const checkXhrRequestErrors = (xhr, func = () => {}) => {
   xhr.addEventListener('load', () => {
     let error;
     switch (xhr.status) {
-      case ServerStatus.SUCCESS:
+      case ServerRequestStatus.SUCCESS:
         func(xhr.response);
         break;
-      case ServerStatus.INVALID_INQUIRY:
+      case ServerRequestStatus.INVALID_INQUIRY:
         error = 'Неверный запрос';
         break;
-      case ServerStatus.NO_AUTHORIZATION:
+      case ServerRequestStatus.NO_AUTHORIZATION:
         error = 'Пользователь не авторизован';
         break;
-      case ServerStatus.NOTHING_FOUND:
+      case ServerRequestStatus.NOTHING_FOUND:
         error = 'Ничего не найдено';
         break;
 
@@ -136,7 +141,7 @@ const load = (onSuccess) => {
 
   checkXhrRequestErrors(xhr, onSuccess);
 
-  xhr.open('GET', DATA_URL_LOAD);
+  xhr.open(ServerRequest.get, DATA_URL_LOAD);
   xhr.send();
 };
 
@@ -150,7 +155,7 @@ const upload = (data, onSuccess) => {
 
   checkXhrRequestErrors(xhr, onSuccess);
 
-  xhr.open('POST', DATA_URL_UPLOAD);
+  xhr.open(ServerRequest.post, DATA_URL_UPLOAD);
   xhr.send(data);
 };
 

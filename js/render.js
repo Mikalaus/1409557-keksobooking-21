@@ -4,6 +4,7 @@ const LOW_PRICE_LIMIT = 10000;
 const HIGH_PRICE_START = 50000;
 const PINS_LIMIT = 5;
 const DEFAULT_FILTER = 'any';
+const NOT_ARRAY_ITEM_INDEX = -1;
 
 const PriceValue = {
   low: 'low',
@@ -49,7 +50,7 @@ const checkAd = (ad, filtersList) => {
   }
 
   filtersList.forEach((filter) => {
-    if (ad.offer.features.indexOf(filter.value) === -1 && filter.classList.contains('checked')) {
+    if (ad.offer.features.indexOf(filter.value) === NOT_ARRAY_ITEM_INDEX && filter.classList.contains('checked')) {
       isSame = false;
     }
   });

@@ -3,6 +3,7 @@
 const DATA_URL_LOAD = 'https://21.javascript.pages.academy/keksobooking/data';
 const DATA_URL_UPLOAD = 'https://21.javascript.pages.academy/keksobooking';
 const ESC = 'Escape';
+const LEFT_BUTTON = 0;
 const ServerRequestStatus = {
   SUCCESS: 200,
   INVALID_INQUIRY: 400,
@@ -53,7 +54,7 @@ const escHandler = (evt) => {
  * @param {Object}
  */
 const mousedownHandler = (evt) => {
-  if (evt.which === 1) {
+  if (evt.button === LEFT_BUTTON) {
     deleteServerInfoPopus(evt);
   }
 };
@@ -66,11 +67,11 @@ const mousedownHandler = (evt) => {
 const deleteServerInfoPopus = (evt) => {
   evt.preventDefault();
   let errorPopup = document.querySelector('.error');
-  if (errorPopup !== null) {
+  if (errorPopup) {
     errorPopup.remove();
   }
   let successPopup = document.querySelector('.success');
-  if (successPopup !== null) {
+  if (successPopup) {
     successPopup.remove();
   }
   successPopup.remove();

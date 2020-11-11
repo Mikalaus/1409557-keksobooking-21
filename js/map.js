@@ -1,8 +1,7 @@
 'use strict';
 
-const RIGHT_CLICK_MOUSE = 1;
 const ENTER = 'Enter';
-const SPACE = 32
+const LEFT_BUTTON = 0;
 
 const pinOffset = {
   LEFT: 33,
@@ -95,7 +94,7 @@ const generatePins = (adsList) => {
      * открытие popup по нажатию с мышки и клавиатуры
      */
     mapPin.addEventListener('click', (evt) => {
-      if (evt.which !== SPACE) {
+      if (evt.button === LEFT_BUTTON || evt.key === ENTER) {
         openPopupByPinClick(i, adsList);
       }
     });
@@ -137,7 +136,7 @@ const disableMap = () => {
 
 const removeAdPopup = () => {
   let popup = document.querySelector('.popup');
-  if (popup !== null) {
+  if (popup) {
     popup.remove();
   }
 };
@@ -173,7 +172,7 @@ const deletePins = () => {
 };
 
 const mainPinActivateHandler = (evt) => {
-  if (evt.key === ENTER || evt.which === RIGHT_CLICK_MOUSE) {
+  if (evt.key === ENTER || evt.button === LEFT_BUTTON) {
     activateMap();
     getLocation(mainPin);
     mainPin.removeEventListener('keydown', mainPinActivateHandler);

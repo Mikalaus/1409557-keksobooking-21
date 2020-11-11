@@ -10,14 +10,14 @@ const RusType = {
 };
 
 const ImageSize = {
-  width: '45',
-  height: '40'
+  WIDTH: '45',
+  HEIGHT: '40'
 };
 
 const escPopupHandler = (evt) => {
   if (evt.key === ESC) {
     let popup = document.querySelector('.map__card');
-    if (popup !== null) {
+    if (popup) {
       popup.remove();
     }
 
@@ -60,7 +60,7 @@ const userPopup = document.querySelector('#card');
  * @param {Array} - массив доп возможностей пользователя
  */
 const transformFeatures = (popup, htmlFeaturesArray, features) => {
-  if (features.length > 0) {
+  if (features.length) {
     for (let i = 0; i < htmlFeaturesArray.length; i++) {
       let fix = 0;
       for (let f = 0; f < features.length; f++) {
@@ -86,13 +86,13 @@ const transformFeatures = (popup, htmlFeaturesArray, features) => {
 const transformImages = (popup, images) => {
   let popupPhotos = popup.querySelector('.popup__photos');
   let popupPhoto = popup.querySelector('.popup__photo');
-  if (images.length > 0) {
+  if (images.length) {
     for (let i = 0; i < images.length; i++) {
       if (i === 0) {
         popupPhoto.src = images[i];
       } else {
         let image = document.createElement('img');
-        image.width = ImageSize.width;
+        image.width = ImageSize.WIDTH;
         image.height = ImageSize.height;
         image.classList.add('popup__photo');
         image.src = images[i];

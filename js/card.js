@@ -64,7 +64,7 @@ const transformFeatures = (popup, htmlFeaturesArray, features) => {
     for (let i = 0; i < htmlFeaturesArray.length; i++) {
       let fix = 0;
       for (let f = 0; f < features.length; f++) {
-        if (htmlFeaturesArray[i].classList.contains(`popup__feature--${features[f]}`) === false) {
+        if (!htmlFeaturesArray[i].classList.contains(`popup__feature--${features[f]}`)) {
           fix++;
           if (fix === features.length) {
             htmlFeaturesArray[i].remove();

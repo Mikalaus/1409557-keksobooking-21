@@ -4,6 +4,7 @@ const DATA_URL_LOAD = 'https://21.javascript.pages.academy/keksobooking/data';
 const DATA_URL_UPLOAD = 'https://21.javascript.pages.academy/keksobooking';
 const ESC = 'Escape';
 const LEFT_BUTTON = 0;
+const SERVER_TIMEOUT = 1000;
 const ServerRequestStatus = {
   SUCCESS: 200,
   INVALID_INQUIRY: 400,
@@ -15,8 +16,6 @@ const ServerRequest = {
   GET: 'GET',
   POST: 'POST'
 };
-
-const SERVER_TIMEOUT = 1000;
 
 const serverErrorTemplate = document.querySelector('#server-error');
 const successTemplate = document.querySelector('#success');

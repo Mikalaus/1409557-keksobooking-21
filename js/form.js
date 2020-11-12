@@ -1,6 +1,14 @@
 'use strict';
 
 /**
+ * @type {number}
+ * максимальная цена за одну ночь
+ */
+const MAX_PRICE = 1000000;
+
+const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+
+/**
  * минимальные стоимости проживания за одну ночь
  * @type {Object}
  */
@@ -31,14 +39,6 @@ const TitleLength = {
   MIN: 30,
   MAX: 100
 };
-
-/**
- * @type {number}
- * максимальная цена за одну ночь
- */
-const MAX_PRICE = 1000000;
-
-const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 
 const adFormTitle = document.querySelector('#title');
 const adFormPrice = document.querySelector('#price');
@@ -185,14 +185,7 @@ adFormTypeSelect.addEventListener('change', () => {
  * @param {boolean} - true - in || false - out
  */
 const timeInChangeHandler = (bool) => {
-  let time;
-
-  if (bool) {
-    time = adFormTimeIn.value;
-  } else {
-    time = adFormTimeOut.value;
-  }
-
+  let time = bool ? adFormTimeIn.value : adFormTimeOut.value;
 
   for (let i = 0; i < adFormTimeOutOptions.length; i++) {
     adFormTimeOutOptions[i].removeAttribute('selected');

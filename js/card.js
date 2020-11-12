@@ -3,10 +3,10 @@
 const ESC = 'Escape';
 
 const RusType = {
-  bugalow: 'Бунгало',
-  palace: 'Дворец',
-  flat: 'Квартира',
-  house: 'Дом'
+  BUNGALOW: 'Бунгало',
+  PALACE: 'Дворец',
+  FLAT: 'Квартира',
+  HOUSE: 'Дом'
 };
 
 const ImageSize = {
@@ -37,7 +37,7 @@ const generateAd = (ad) => {
   popup.querySelector('.popup__title').textContent = ad.offer.title;
   popup.querySelector('.popup__text--address').textContent = ad.offer.address;
   popup.querySelector('.popup__text--price').textContent = `${ad.offer.price}₽/ночь`;
-  popup.querySelector('.popup__type').textContent = RusType[ad.offer.type];
+  popup.querySelector('.popup__type').textContent = RusType[ad.offer.type.toUpperCase()];
   popup.querySelector('.popup__text--capacity').textContent = `${ad.offer.rooms} комнаты для ${ad.offer.guests} гостей`;
   popup.querySelector('.popup__text--time').textContent = `Заезд после ${ad.offer.checkin}, выезд до ${ad.offer.checkout}`;
   transformFeatures(popup, popupFeatures, ad.offer.features);

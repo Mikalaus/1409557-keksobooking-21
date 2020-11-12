@@ -12,8 +12,8 @@ const ServerRequestStatus = {
 };
 
 const ServerRequest = {
-  get: 'GET',
-  post: 'POST'
+  GET: 'GET',
+  POST: 'POST'
 };
 
 const SERVER_TIMEOUT = 1000;
@@ -142,7 +142,7 @@ const load = (onSuccess) => {
 
   checkXhrRequestErrors(xhr, onSuccess);
 
-  xhr.open(ServerRequest.get, DATA_URL_LOAD);
+  xhr.open(ServerRequest.GET, DATA_URL_LOAD);
   xhr.send();
 };
 
@@ -156,7 +156,7 @@ const upload = (data, onSuccess) => {
 
   checkXhrRequestErrors(xhr, onSuccess);
 
-  xhr.open(ServerRequest.post, DATA_URL_UPLOAD);
+  xhr.open(ServerRequest.POST, DATA_URL_UPLOAD);
   xhr.send(data);
 };
 

@@ -7,9 +7,9 @@ const DEFAULT_FILTER = 'any';
 const NOT_ARRAY_ITEM_INDEX = -1;
 
 const PriceValue = {
-  low: 'low',
-  med: 'middle',
-  high: 'high'
+  LOW: 'low',
+  MED: 'middle',
+  HIGH: 'high'
 };
 
 const filters = document.querySelector('.map__filters');
@@ -26,11 +26,11 @@ const checkAd = (ad, filtersList) => {
   let priceValue;
 
   if (ad.offer.price < LOW_PRICE_LIMIT) {
-    priceValue = PriceValue.low;
+    priceValue = PriceValue.LOW;
   } else if (ad.offer.price >= LOW_PRICE_LIMIT && ad.offer.price <= HIGH_PRICE_START) {
-    priceValue = PriceValue.med;
+    priceValue = PriceValue.MED;
   } else if (ad.offer.price > HIGH_PRICE_START) {
-    priceValue = PriceValue.high;
+    priceValue = PriceValue.HIGH;
   }
 
   if (filtersSelectList[0].value !== ad.offer.type && filtersSelectList[0].value !== DEFAULT_FILTER) {

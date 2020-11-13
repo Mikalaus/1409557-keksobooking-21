@@ -91,7 +91,7 @@ const checkRoomNumberCapacity = () => {
 
 /**
  * дезактивация полей ввода
- * @param {boolean} - значение активации или дезактивации
+ * @param {boolean} control - значение активации или дезактивации
  */
 const controlInputForms = (control) => {
 
@@ -182,7 +182,7 @@ adFormTypeSelect.addEventListener('change', () => {
 
 /**
  * cb для функции рассчета времени заезда/выезда
- * @param {boolean} - true - in || false - out
+ * @param {boolean} bool - true - in || false - out
  */
 const timeInChangeHandler = (bool) => {
   let time = bool ? adFormTimeIn.value : adFormTimeOut.value;

@@ -17,8 +17,8 @@ const filtersSelectList = filters.querySelectorAll('select');
 
 /**
  * функция выдачи ранга каждому объявлению, исходя из которого идет сортировка всех объявлений
- * @param {Object} - объявление
- * @param {Array} - массив фильтров чекбоксов
+ * @param {Object} ad - объявление
+ * @param {Array} filtersList - массив фильтров чекбоксов
  * @return {Number} - обявление/null
  */
 const checkAd = (ad, filtersList) => {
@@ -64,8 +64,8 @@ const checkAd = (ad, filtersList) => {
 
 /**
  * функция рендера массива объявления с целью поиска наиболее похожих
- * @param {Array} - массив объявлений
- * @param {Array} - массив housingFeaturesSelect фильтров
+ * @param {Array} adsList - массив объявлений
+ * @param {Array} filtersList - массив housingFeaturesSelect фильтров
  * @return {Array} - отрендеренный массив
  */
 const renderAds = (adsList, filtersList = []) => {

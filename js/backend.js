@@ -23,7 +23,7 @@ const map = document.querySelector('.map');
 
 /**
  * Отображение ошибки при загрузке данных с сервера
- * @param {String} - текст ошибки
+ * @param {String} errorText - текст ошибки
  */
 const showServerError = (errorText) => {
   let errorMessage = serverErrorTemplate.content.cloneNode(true);
@@ -40,7 +40,7 @@ const showServerError = (errorText) => {
 
 /**
  * cb по нажатию на escape
- * @param {Object}
+ * @param {Object} evt
  */
 const escHandler = (evt) => {
   if (evt.key === ESC) {
@@ -50,7 +50,7 @@ const escHandler = (evt) => {
 
 /**
  * cb по нажатию на праввую кнопку мыши
- * @param {Object}
+ * @param {Object} evt
  */
 const mousedownHandler = (evt) => {
   if (evt.button === LEFT_BUTTON) {
@@ -61,7 +61,7 @@ const mousedownHandler = (evt) => {
 /**
  * функция для удаления попапов при успешной выгрузке объявления и неудачной загрузки данных, а так же
  * eventListener на документе
- * @param {Object}
+ * @param {Object} evt
  */
 const deleteServerInfoPopus = (evt) => {
   evt.preventDefault();
@@ -134,7 +134,7 @@ const checkXhrRequestErrors = (xhr, func = () => {}) => {
 
 /**
  * Функция загрузки данных объявлений с сервера
- * @param {function} - при успешной загрузке
+ * @param {function} onSuccess - при успешной загрузке
  */
 const load = (onSuccess) => {
   let xhr = new XMLHttpRequest();
@@ -147,8 +147,8 @@ const load = (onSuccess) => {
 
 /**
  * Функция отправки данных объявлений пользователя на сервера
- * @param {FormData} - данные формы
- * @param {function} - что сделать при успешной выгрузки данных
+ * @param {FormData} data - данные формы
+ * @param {function} onSuccess - что сделать при успешной выгрузки данных
  */
 const upload = (data, onSuccess) => {
   let xhr = new XMLHttpRequest();

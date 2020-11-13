@@ -54,7 +54,7 @@ housingFeaturesSelect.forEach((filter) => {
 
 /**
  * Функция получения дефолтных(начальных) координат метки
- * @param {object} - метка
+ * @param {object} obj - метка
  */
 const getStartLocation = (obj) => {
   let left = obj.style.left = (parseInt(obj.style.left, 10));
@@ -66,7 +66,7 @@ getStartLocation(mainPin);
 
 /**
  * Функция получения координат метки
- * @param {object} - метка
+ * @param {object} obj - метка
  */
 const getLocation = (obj) => {
   let left = (parseInt(obj.style.left, 10)) + pinOffset.LEFT;
@@ -76,7 +76,7 @@ const getLocation = (obj) => {
 
 /**
  * генерация меток на карте
- * @param {Array} - массив объектов
+ * @param {Array} adsList - массив объектов
  */
 const generatePins = (adsList) => {
   deletePins();
@@ -143,8 +143,8 @@ const removeAdPopup = () => {
 
 /**
  * функция для открытия popup
- * @param {number} - номер итерации цикла, перебирающего все метки на карте
- * @param {Array} - массив карточек объявлений
+ * @param {number} i - номер итерации цикла, перебирающего все метки на карте
+ * @param {Array} ads - массив карточек объявлений
  */
 const openPopupByPinClick = (i, ads) => {
   removeAdPopup();

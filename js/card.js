@@ -27,7 +27,7 @@ const escPopupHandler = (evt) => {
 
 /**
  * генерация объявления на карте
- * @param {Object} - объект создаваемого объявления
+ * @param {Object} ad - объект создаваемого объявления
  * @return {element} - объявление
  */
 const generateAd = (ad) => {
@@ -55,9 +55,9 @@ const userPopup = document.querySelector('#card');
 
 /**
  * отображение доп возможностей через разметку из массива доп возможностей объявления
- * @param {element} - создаваемый элемент разметки (popup)
- * @param {Array} - массив элементов разметки доп возможностей
- * @param {Array} - массив доп возможностей пользователя
+ * @param {element} popup - создаваемый элемент разметки (popup)
+ * @param {Array} htmlFeaturesArray - массив элементов разметки доп возможностей
+ * @param {Array} features - массив доп возможностей пользователя
  */
 const transformFeatures = (popup, htmlFeaturesArray, features) => {
   if (features.length) {
@@ -81,7 +81,8 @@ const transformFeatures = (popup, htmlFeaturesArray, features) => {
 
 /**
  * отображение изображений через разметку из массива изображений объявления
- * @param {Array} - массив фотографий объявления
+ * @param {Object} popup - создаваемое объявление
+ * @param {Array} images - массив фотографий объявления
  */
 const transformImages = (popup, images) => {
   let popupPhotos = popup.querySelector('.popup__photos');
@@ -106,6 +107,5 @@ const transformImages = (popup, images) => {
 };
 
 window.card = {
-
   generateAd: generateAd
 };
